@@ -4,7 +4,7 @@
  * Hardened: Comprehensive precaching of all modular assets and pinned CDNs.
  */
 
-const CACHE_NAME = 'md-editor-v2.0.0';
+const CACHE_NAME = 'md-editor-v2.1.0';
 const OFFLINE_URL = './404.html';
 
 // Explicit dep versioning to ensure singelton instances
