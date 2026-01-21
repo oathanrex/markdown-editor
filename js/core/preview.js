@@ -64,17 +64,25 @@ export async function postProcess(container) {
             }
 
             if (diagrams.length > 0) {
-                await mermaid.run({
-                    nodes: diagrams,
-                    suppressErrors: true // Handle errors manually or prevent console spam
-                }).catch(e => {
-                    console.warn("Mermaid run error:", e);
-                    diagrams.forEach(el => {
-                        if (!el.getAttribute('data-processed')) {
-                            el.innerHTML = `<span style="color:red; font-family:monospace;">Diagram Syntax Error</span>`;
-                        }
-                    });
+                // Filter out obviously incomplete diagrams (e.g., just "graph")
+                const validDiagrams = Array.from(diagrams).filter(el => {
+                    const code = el.innerText.trim();
+                    return code.length > 5 && !code.match(/^\s*graph\s*$/i);
                 });
+
+                if (validDiagrams.length > 0) {
+                    await mermaid.run({
+                        nodes: validDiagrams,
+                        suppressErrors: true
+                    }).catch(e => {
+                        console.warn("Mermaid run error:", e);
+                        validDiagrams.forEach(el => {
+                            if (!el.getAttribute('data-processed')) {
+                                el.innerHTML = `<div style="color:var(--text-error, #cf222e); background: rgba(255,0,0,0.05); padding: 8px; border-radius: 4px; border: 1px solid rgba(255,0,0,0.1); font-family:monospace; font-size: 0.85rem;">Diagram Syntax Error</div>`;
+                            }
+                        });
+                    });
+                }
             }
         } catch (e) {
             console.warn("Mermaid rendering failed:", e);
