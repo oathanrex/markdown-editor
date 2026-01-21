@@ -4,11 +4,13 @@
  * Hardened: Supports dynamic theme switching and robust scroll info.
  */
 
-import { basicSetup } from 'https://esm.sh/codemirror@6.0.1';
-import { EditorView } from 'https://esm.sh/@codemirror/view@6.23.0';
+import { EditorView, keymap, lineNumbers, highlightActiveLine, drawSelection, dropCursor, highlightSpecialChars, highlightActiveLineGutter } from 'https://esm.sh/@codemirror/view@6.23.0';
 import { EditorState, Compartment } from 'https://esm.sh/@codemirror/state@6.4.0';
 import { markdown } from 'https://esm.sh/@codemirror/lang-markdown@6.2.3';
 import { oneDark } from 'https://esm.sh/@codemirror/theme-one-dark@6.1.2';
+import { defaultKeymap, history, historyKeymap } from 'https://esm.sh/@codemirror/commands@6.6.0';
+import { searchKeymap, highlightSelectionMatches } from 'https://esm.sh/@codemirror/search@6.5.6';
+import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from 'https://esm.sh/@codemirror/autocomplete@6.16.3';
 
 let editor;
 const themeCompartment = new Compartment();
@@ -24,19 +26,45 @@ export function initEditor(container, initialContent, onUpdate) {
 
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
+    // Manual setup to ensure singleton instances of Extension classes
+    const extensions = [
+        lineNumbers(),
+        highlightActiveLineGutter(),
+        highlightSpecialChars(),
+        history(),
+        drawSelection(),
+        dropCursor(),
+        EditorState.allowMultipleSelections.of(true),
+        markdown(),
+
+        // Keymaps
+        keymap.of([
+            ...closeBracketsKeymap,
+            ...defaultKeymap,
+            ...searchKeymap,
+            ...historyKeymap,
+            ...completionKeymap
+        ]),
+
+        // Functional components
+        autocompletion(),
+        closeBrackets(),
+        highlightSelectionMatches(),
+        highlightActiveLine(),
+
+        // App Logic
+        updateListener,
+        EditorView.lineWrapping,
+        themeCompartment.of(isDark ? oneDark : []),
+        EditorView.theme({
+            "&": { height: "100%" },
+            ".cm-scroller": { overflow: "auto" }
+        })
+    ];
+
     const startState = EditorState.create({
         doc: initialContent,
-        extensions: [
-            basicSetup,
-            markdown(),
-            updateListener,
-            EditorView.lineWrapping,
-            themeCompartment.of(isDark ? oneDark : []),
-            EditorView.theme({
-                "&": { height: "100%" },
-                ".cm-scroller": { overflow: "auto" }
-            })
-        ]
+        extensions: extensions
     });
 
     editor = new EditorView({
