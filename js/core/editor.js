@@ -4,13 +4,17 @@
  * Hardened: Supports dynamic theme switching and robust scroll info.
  */
 
-import { EditorView, keymap, lineNumbers, highlightActiveLine, drawSelection, dropCursor, highlightSpecialChars, highlightActiveLineGutter } from 'https://esm.sh/@codemirror/view@6.23.0';
+// Core dependencies (State must be singleton)
 import { EditorState, Compartment } from 'https://esm.sh/@codemirror/state@6.4.0';
-import { markdown } from 'https://esm.sh/@codemirror/lang-markdown@6.2.3';
-import { oneDark } from 'https://esm.sh/@codemirror/theme-one-dark@6.1.2';
-import { defaultKeymap, history, historyKeymap } from 'https://esm.sh/@codemirror/commands@6.6.0';
-import { searchKeymap, highlightSelectionMatches } from 'https://esm.sh/@codemirror/search@6.5.6';
-import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from 'https://esm.sh/@codemirror/autocomplete@6.16.3';
+// View depends on State
+import { EditorView, keymap, lineNumbers, highlightActiveLine, drawSelection, dropCursor, highlightSpecialChars, highlightActiveLineGutter } from 'https://esm.sh/@codemirror/view@6.23.0?deps=@codemirror/state@6.4.0';
+
+// Extensions depending on State and View
+import { markdown } from 'https://esm.sh/@codemirror/lang-markdown@6.2.3?deps=@codemirror/state@6.4.0,@codemirror/view@6.23.0';
+import { oneDark } from 'https://esm.sh/@codemirror/theme-one-dark@6.1.2?deps=@codemirror/state@6.4.0,@codemirror/view@6.23.0';
+import { defaultKeymap, history, historyKeymap } from 'https://esm.sh/@codemirror/commands@6.6.0?deps=@codemirror/state@6.4.0,@codemirror/view@6.23.0';
+import { searchKeymap, highlightSelectionMatches } from 'https://esm.sh/@codemirror/search@6.5.6?deps=@codemirror/state@6.4.0,@codemirror/view@6.23.0';
+import { closeBrackets, autocompletion, closeBracketsKeymap, completionKeymap } from 'https://esm.sh/@codemirror/autocomplete@6.16.3?deps=@codemirror/state@6.4.0,@codemirror/view@6.23.0';
 
 let editor;
 const themeCompartment = new Compartment();
