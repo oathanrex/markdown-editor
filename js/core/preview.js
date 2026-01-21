@@ -54,14 +54,30 @@ export async function postProcess(container) {
     // 2. Diagram Rendering (Mermaid)
     if (window.mermaid) {
         try {
-            // Re-initialize mermaid each time or use run
+            mermaid.initialize({ startOnLoad: false, theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default' });
             const diagrams = container.querySelectorAll('.language-mermaid');
+
+            for (const el of diagrams) {
+                // Remove existing processed attribute if re-rendering
+                el.removeAttribute('data-processed');
+                // Ensure it's a div not pre code for better rendering support if needed, though run handles nodes
+            }
+
             if (diagrams.length > 0) {
-                await mermaid.run({ nodes: diagrams });
+                await mermaid.run({
+                    nodes: diagrams,
+                    suppressErrors: true // Handle errors manually or prevent console spam
+                }).catch(e => {
+                    console.warn("Mermaid run error:", e);
+                    diagrams.forEach(el => {
+                        if (!el.getAttribute('data-processed')) {
+                            el.innerHTML = `<span style="color:red; font-family:monospace;">Diagram Syntax Error</span>`;
+                        }
+                    });
+                });
             }
         } catch (e) {
-            console.warn("Mermaid rendering failed. This usually happens with invalid syntax.");
-            // Optionally show error in place of diagram
+            console.warn("Mermaid rendering failed:", e);
         }
     }
 
