@@ -4,8 +4,11 @@
  * Hardened: Comprehensive precaching of all modular assets and pinned CDNs.
  */
 
-const CACHE_NAME = 'md-editor-v1.8.0';
+const CACHE_NAME = 'md-editor-v2.0.0';
 const OFFLINE_URL = './404.html';
+
+// Explicit dep versioning to ensure singelton instances
+const CM_DEPS = '?deps=@codemirror/state@6.4.0,@codemirror/view@6.23.0';
 
 const PRECACHE_ASSETS = [
     './',
@@ -40,14 +43,14 @@ const PRECACHE_ASSETS = [
     'https://cdn.jsdelivr.net/npm/docx@8.2.4/build/index.umd.js',
     'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js',
     'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js',
-    // CodeMirror Pinned Modules
-    'https://esm.sh/@codemirror/view@6.23.0',
+    // CodeMirror Pinned Modules with Shared Deps
     'https://esm.sh/@codemirror/state@6.4.0',
-    'https://esm.sh/@codemirror/lang-markdown@6.2.3',
-    'https://esm.sh/@codemirror/theme-one-dark@6.1.2',
-    'https://esm.sh/@codemirror/commands@6.6.0',
-    'https://esm.sh/@codemirror/search@6.5.6',
-    'https://esm.sh/@codemirror/autocomplete@6.16.3'
+    'https://esm.sh/@codemirror/view@6.23.0?deps=@codemirror/state@6.4.0',
+    'https://esm.sh/@codemirror/lang-markdown@6.2.3' + CM_DEPS,
+    'https://esm.sh/@codemirror/theme-one-dark@6.1.2' + CM_DEPS,
+    'https://esm.sh/@codemirror/commands@6.6.0' + CM_DEPS,
+    'https://esm.sh/@codemirror/search@6.5.6' + CM_DEPS,
+    'https://esm.sh/@codemirror/autocomplete@6.16.3' + CM_DEPS
 ];
 
 self.addEventListener('install', (event) => {
