@@ -1,33 +1,64 @@
 :root {
-    /* Light Theme */
-    --primary: #6c5ce7;
-    --primary-hover: #5b4cdb;
-    --bg-app: #f8f9fa;
-    --bg-header: #ffffff;
-    --bg-toolbar: #ffffff;
-    --bg-editor: #ffffff;
-    --bg-preview: #ffffff;
-    --bg-sidebar: #f1f2f6;
-    --bg-status: #ffffff;
-    --text-main: #2d3436;
-    --text-muted: #636e72;
-    --border-color: #dfe6e9;
-    --shadow: 0 2px 10px rgba(0,0,0,0.05);
-    --selection: rgba(108, 92, 231, 0.2);
-    --accent: #00cec9;
+    /* Modern Light Theme (Slate/Inter based) */
+    --primary: #4F46E5;
+    /* Indigo 600 */
+    --primary-hover: #4338ca;
+
+    --bg-app: #F3F4F6;
+    /* Gray 100 */
+    --bg-header: #FFFFFF;
+    --bg-toolbar: #FFFFFF;
+    --bg-editor: #FFFFFF;
+    --bg-preview: #FFFFFF;
+    --bg-sidebar: #F9FAFB;
+    /* Gray 50 */
+    --bg-status: #FFFFFF;
+    --bg-hover: #F3F4F6;
+
+    --text-main: #111827;
+    /* Gray 900 */
+    --text-secondary: #374151;
+    /* Gray 700 */
+    --text-muted: #6B7280;
+    /* Gray 500 */
+    --text-error: #EF4444;
+    /* Red 500 */
+
+    --border-color: #E5E7EB;
+    /* Gray 200 */
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --selection: rgba(79, 70, 229, 0.15);
 }
 
 [data-theme="dark"] {
-    --bg-app: #121212;
-    --bg-header: #1e1e1e;
-    --bg-toolbar: #1e1e1e;
-    --bg-editor: #1a1a1a;
-    --bg-preview: #1a1a1a;
-    --bg-sidebar: #181818;
-    --bg-status: #1e1e1e;
-    --text-main: #e0e0e0;
-    --text-muted: #a0a0a0;
-    --border-color: #333333;
-    --shadow: 0 2px 10px rgba(0,0,0,0.3);
-    --selection: rgba(108, 92, 231, 0.4);
+    /* Modern Dark Theme (Gray/Zinc based) */
+    --primary: #6366F1;
+    /* Indigo 500 */
+    --primary-hover: #818CF8;
+
+    --bg-app: #0f172a;
+    /* Slate 900 */
+    --bg-header: #1e293b;
+    /* Slate 800 */
+    --bg-toolbar: #1e293b;
+    --bg-editor: #0f172a;
+    --bg-preview: #0f172a;
+    --bg-sidebar: #1e293b;
+    --bg-status: #1e293b;
+    --bg-hover: #334155;
+    /* Slate 700 */
+
+    --text-main: #F9FAFB;
+    /* Gray 50 */
+    --text-secondary: #E5E7EB;
+    /* Gray 200 */
+    --text-muted: #9CA3AF;
+    /* Gray 400 */
+    --text-error: #F87171;
+    /* Red 400 */
+
+    --border-color: #334155;
+    /* Slate 700 */
+    --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --selection: rgba(99, 102, 241, 0.25);
 }
