@@ -1,0 +1,63 @@
+/* CodeMirror Overrides & Styling */
+.editor-pane {
+    position: relative;
+    font-family: 'Fira Code', monospace;
+}
+
+.cm-editor {
+    height: 100%;
+}
+
+.cm-scroller {
+    font-family: 'Fira Code', 'Consolas', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+}
+
+.cm-gutters {
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-color) !important;
+    color: var(--text-muted) !important;
+}
+
+.cm-activeLine {
+    background-color: var(--selection) !important;
+}
+
+.cm-activeLineGutter {
+    background-color: var(--border-color) !important;
+}
+
+/* Custom Highlight Themes via CSS Variables */
+.cm-keyword {
+    color: #d63384;
+}
+
+.cm-operator {
+    color: #0d6efd;
+}
+
+.cm-variableName {
+    color: #198754;
+}
+
+.cm-comment {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.cm-string {
+    color: #fd7e14;
+}
+
+[data-theme="dark"] .cm-keyword {
+    color: #ff79c6;
+}
+
+[data-theme="dark"] .cm-variableName {
+    color: #50fa7b;
+}
+
+[data-theme="dark"] .cm-string {
+    color: #f1fa8c;
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    
+    <!-- Main Application Page -->
+    <url>
+        <loc>https://oathanrex.github.io/markdown-editor/</loc>
+        <lastmod>2024-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://oathanrex.github.io/markdown-editor/assets/images/og-image.png</image:loc>
+            <image:title>Professional Markdown Editor - Free Online Tool</image:title>
+            <image:caption>Split-view markdown editor with real-time preview</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Documentation & Blog stubs (to be added in later phases) -->
+</urlset>

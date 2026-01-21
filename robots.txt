@@ -1,0 +1,36 @@
+# Robots.txt for Markdown Editor
+# https://oathanrex.github.io/markdown-editor/
+
+User-agent: *
+Allow: /
+
+# Allow all crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Disallow internal/utility files
+Disallow: /markdown-editor/sw.js
+Disallow: /markdown-editor/manifest.json
+Disallow: /markdown-editor/browserconfig.xml
+
+# Allow important resources
+Allow: /markdown-editor/css/
+Allow: /markdown-editor/js/
+Allow: /markdown-editor/assets/
+Allow: /markdown-editor/docs/
+Allow: /markdown-editor/blog/
+
+# Sitemap location
+Sitemap: https://oathanrex.github.io/markdown-editor/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

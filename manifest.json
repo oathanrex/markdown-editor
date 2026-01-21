@@ -1,0 +1,39 @@
+{
+    "id": "com.oathanrex.markdowneditor",
+    "name": "Professional Markdown Editor",
+    "short_name": "MD Editor",
+    "description": "Free online markdown editor with real-time preview, GitHub-flavored markdown support, and export to PDF, HTML, DOCX.",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "any",
+    "theme_color": "#6c5ce7",
+    "background_color": "#ffffff",
+    "categories": [
+        "productivity",
+        "utilities",
+        "developer tools"
+    ],
+    "lang": "en",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "./assets/images/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "./assets/images/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "./assets/images/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

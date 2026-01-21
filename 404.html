@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Markdown Editor</title>
+    <meta name="description" content="The page you're looking for doesn't exist. Return to the Markdown Editor.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="./assets/images/favicon.ico">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --bg: #ffffff;
+            --text: #2d3436;
+            --border: #dee2e6;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1a1a2e;
+                --text: #ffffff;
+                --border: #2d3748;
+            }
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 8rem;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>404</h1>
+        <h2>Page Not Found</h2>
+        <p>Sorry, we couldn't find the page you're looking for.</p>
+        <a href="index.html" class="btn">Back to Editor</a>
+    </div>
+</body>
+
+</html>

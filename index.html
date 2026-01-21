@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    <!-- PRIMARY SEO META TAGS -->
+    <title>Professional Markdown Editor - Real-time Preview & Multi-format Export</title>
+    <meta name="title" content="Professional Markdown Editor - Real-time Preview & Multi-format Export">
+    <meta name="description"
+        content="A professional-grade online markdown editor with real-time preview, GitHub-flavored markdown, and multi-format export (PDF, HTML, DOCX, LaTeX). 100% client-side, offline-first.">
+    <meta name="keywords"
+        content="markdown editor, online markdown, gfm, markdown preview, export to pdf, export to docx, mermaid, katex">
+    <meta name="author" content="OathanRex">
+
+    <!-- ROBOTS -->
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://oathanrex.github.io/markdown-editor/">
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Professional Markdown Editor">
+    <meta name="twitter:description"
+        content="100% client-side markdown editor with real-time preview and multi-format export.">
+    <meta name="twitter:image" content="https://oathanrex.github.io/markdown-editor/assets/images/og-image.png">
+
+    <!-- PWA & MOBILE -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="MD Editor">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#6c5ce7">
+
+    <!-- STYLESHEETS -->
+    <link rel="stylesheet" href="./css/themes.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/editor.css">
+    <link rel="stylesheet" href="./css/preview.css">
+
+    <!-- EXTERNAL LIB STYLES -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+</head>
+
+<body>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Initializing Editor...</p>
+    </div>
+
+    <div id="app" class="app-container" style="display:none;">
+        <!-- HEADER / MENU BAR -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M2.5 18l5-12 5 12h-2l-1-2.5h-4l-1 2.5h-2zm3-4.5h2l-1-2.5-1 2.5zm10.5 4.5v-9l4 4.5 4-4.5v9h-2v-5l-2 2-2-2v5h-2z" />
+                    </svg>
+                    <span>MD Editor</span>
+                </div>
+                <nav class="app-nav">
+                    <div class="menu-item">
+                        <button class="menu-trigger">File</button>
+                        <div class="menu-dropdown">
+                            <button data-action="new">New <span class="shortcut">Ctrl+N</span></button>
+                            <button data-action="open">Open <span class="shortcut">Ctrl+O</span></button>
+                            <button data-action="save">Save <span class="shortcut">Ctrl+S</span></button>
+                            <hr>
+                            <button data-action="import">Import...</button>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <button class="menu-trigger">Export</button>
+                        <div class="menu-dropdown">
+                            <button data-action="export-pdf">PDF Document (.pdf)</button>
+                            <button data-action="export-html">HTML Document (.html)</button>
+                            <button data-action="export-docx">Word Document (.docx)</button>
+                            <button data-action="export-latex">LaTeX Source (.tex)</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="header-right">
+                <button id="theme-toggle" class="icon-btn" title="Toggle Theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5" />
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                </button>
+                <button id="settings-toggle" class="icon-btn" title="Settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- TOOLBAR -->
+        <section class="toolbar" role="toolbar">
+            <div class="toolbar-group">
+                <button data-cmd="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+                <button data-cmd="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+                <button data-cmd="strike" title="Strikethrough"><s>S</s></button>
+            </div>
+            <div class="divider"></div>
+            <div class="toolbar-group">
+                <button data-cmd="h1" title="Heading 1">H1</button>
+                <button data-cmd="h2" title="Heading 2">H2</button>
+                <button data-cmd="h3" title="Heading 3">H3</button>
+            </div>
+            <div class="divider"></div>
+            <div class="toolbar-group">
+                <button data-cmd="ul" title="Unordered List">• List</button>
+                <button data-cmd="ol" title="Ordered List">1. List</button>
+                <button data-cmd="task" title="Task List">☑ List</button>
+            </div>
+            <div class="divider"></div>
+            <div class="toolbar-group">
+                <button data-cmd="link" title="Insert Link">Link</button>
+                <button data-cmd="image" title="Insert Image">Img</button>
+                <button data-cmd="table" title="Insert Table">Table</button>
+            </div>
+            <div class="divider"></div>
+            <div class="toolbar-group">
+                <button data-cmd="code" title="Inline Code">&lt;&gt;</button>
+                <button data-cmd="codeblock" title="Code Block">C#</button>
+                <button data-cmd="math" title="Math Formula">∑</button>
+                <button data-cmd="mermaid" title="Mermaid Diagram">Graph</button>
+                <button data-cmd="emoji" title="Emoji">😊</button>
+            </div>
+        </section>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="editor-main" role="main">
+            <aside id="sidebar" class="sidebar" aria-label="Document Outline">
+                <div class="sidebar-header">Outline</div>
+                <div id="outline-content" class="outline-content"></div>
+            </aside>
+            <div id="split-view" class="split-view">
+                <div id="editor-pane" class="editor-pane">
+                    <div id="cm-editor"></div>
+                </div>
+                <div id="resizer" class="resizer"></div>
+                <div id="preview-pane" class="preview-pane">
+                    <div id="preview-content" class="markdown-body"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- STATUS BAR -->
+        <footer class="status-bar" role="contentinfo" aria-live="polite">
+            <div class="status-left">
+                <span id="pos-info">Ln 1, Col 1</span>
+                <span id="word-count">0 words</span>
+            </div>
+            <div class="status-center">
+                <span id="sync-status">All changes saved</span>
+            </div>
+            <div class="status-right">
+                <span id="reading-time">1 min read</span>
+                <span id="editor-mode">Markdown (GFM)</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODALS -->
+    <div id="modal-overlay" class="modal-overlay">
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label>Auto-save</label>
+                    <input type="checkbox" id="setting-autosave" checked>
+                </div>
+                <div class="setting-item">
+                    <label>Line Numbers</label>
+                    <input type="checkbox" id="setting-linenumbers" checked>
+                </div>
+                <div class="setting-item">
+                    <label>Font Size (px)</label>
+                    <input type="number" id="setting-fontsize" value="14" min="8" max="32">
+                </div>
+                <div class="setting-item">
+                    <label>Word Wrap</label>
+                    <input type="checkbox" id="setting-wordwrap" checked>
+                </div>
+                <div class="setting-item">
+                    <label>Preview Theme</label>
+                    <select id="setting-preview-theme">
+                        <option value="github">GitHub</option>
+                        <option value="modern">Modern</option>
+                        <option value="dark">Dark Professional</option>
+                    </select>
+                </div>
+                <div class="modal-section-title">Export Settings</div>
+                <div class="setting-item">
+                    <label>PDF Page Size</label>
+                    <select id="setting-pdf-size">
+                        <option value="a4">A4</option>
+                        <option value="letter">Letter</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Modal -->
+        <div id="table-modal" class="modal">
+            <div class="modal-header">
+                <h3>Insert Table</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>Rows: <input type="number" id="table-rows" value="3" min="1"></label>
+                <label>Cols: <input type="number" id="table-cols" value="3" min="1"></label>
+                <div class="setting-item">
+                    <label>Header Row</label>
+                    <input type="checkbox" id="table-header" checked>
+                </div>
+                <button id="confirm-table" class="primary-btn">Insert</button>
+            </div>
+        </div>
+
+        <!-- Link Modal -->
+        <div id="link-modal" class="modal">
+            <div class="modal-header">
+                <h3>Insert Link</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Text</label>
+                    <input type="text" id="link-text" placeholder="Link text">
+                </div>
+                <div class="input-group">
+                    <label>URL</label>
+                    <input type="text" id="link-url" placeholder="https://">
+                </div>
+                <button id="confirm-link" class="primary-btn">Insert</button>
+            </div>
+        </div>
+
+        <!-- Image Modal -->
+        <div id="image-modal" class="modal">
+            <div class="modal-header">
+                <h3>Insert Image</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>URL</label>
+                    <input type="text" id="image-url" placeholder="https://">
+                </div>
+                <div class="input-group">
+                    <label>Alt Text</label>
+                    <input type="text" id="image-alt" placeholder="Image description">
+                </div>
+                <button id="confirm-image" class="primary-btn">Insert</button>
+            </div>
+        </div>
+
+        <!-- Emoji Modal -->
+        <div id="emoji-modal" class="modal">
+            <div class="modal-header">
+                <h3>Emoji Picker</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="emoji-list" class="emoji-grid">
+                    <!-- Emojis will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Hidden File Input for Import -->
+    <input type="file" id="import-input" style="display:none" accept=".md,.markdown,.txt">
+
+    <!-- SCRIPTS -->
+    <!-- Libraries loaded via CDN for immediate availability in this phase's context -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.2.4/build/index.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <script src="./js/app.js" type="module"></script>
+</body>
+
+</html>
