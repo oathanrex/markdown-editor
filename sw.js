@@ -4,7 +4,7 @@
  * Hardened: Comprehensive precaching of all modular assets and pinned CDNs.
  */
 
-const CACHE_NAME = 'md-editor-v1.7.0';
+const CACHE_NAME = 'md-editor-v1.8.0';
 const OFFLINE_URL = './404.html';
 
 const PRECACHE_ASSETS = [
@@ -41,11 +41,13 @@ const PRECACHE_ASSETS = [
     'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js',
     'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js',
     // CodeMirror Pinned Modules
-    'https://esm.sh/codemirror@6.0.1',
     'https://esm.sh/@codemirror/view@6.23.0',
     'https://esm.sh/@codemirror/state@6.4.0',
     'https://esm.sh/@codemirror/lang-markdown@6.2.3',
-    'https://esm.sh/@codemirror/theme-one-dark@6.1.2'
+    'https://esm.sh/@codemirror/theme-one-dark@6.1.2',
+    'https://esm.sh/@codemirror/commands@6.6.0',
+    'https://esm.sh/@codemirror/search@6.5.6',
+    'https://esm.sh/@codemirror/autocomplete@6.16.3'
 ];
 
 self.addEventListener('install', (event) => {
