@@ -5,11 +5,12 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     color: var(--text-main);
     background: var(--bg-app);
     height: 100vh;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
 }
 
 .app-container {
@@ -20,15 +21,16 @@ body {
 
 /* Header */
 .app-header {
-    height: 50px;
+    height: 56px;
     background: var(--bg-header);
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     flex-shrink: 0;
     z-index: 100;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .header-left,
@@ -41,14 +43,16 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     font-weight: 700;
     color: var(--primary);
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
 }
 
 .app-nav {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .menu-item {
@@ -61,43 +65,61 @@ body {
     color: var(--text-main);
     font-size: 0.9rem;
     cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.15s;
 }
 
 .menu-trigger:hover {
-    background: var(--bg-app);
+    background: var(--bg-hover);
 }
 
 .menu-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 4px);
     left: 0;
     background: var(--bg-header);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    box-shadow: var(--shadow);
-    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 220px;
     display: none;
     flex-direction: column;
-    padding: 0.5rem 0;
+    padding: 0.5rem;
+    z-index: 1000;
 }
 
 .menu-item:hover .menu-dropdown,
 .menu-item.active .menu-dropdown {
     display: flex;
+    animation: fadeIn 0.1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .menu-dropdown button {
     background: none;
     border: none;
     text-align: left;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.9rem;
     color: var(--text-main);
     cursor: pointer;
     display: flex;
     justify-content: space-between;
+    border-radius: 4px;
+    transition: background 0.1s;
 }
 
 .menu-dropdown button:hover {
@@ -108,22 +130,23 @@ body {
 .shortcut {
     opacity: 0.6;
     font-size: 0.75rem;
+    margin-left: 1rem;
 }
 
 hr {
     border: none;
     border-top: 1px solid var(--border-color);
-    margin: 0.5rem 0;
+    margin: 0.4rem 0.5rem;
 }
 
 /* Toolbar */
 .toolbar {
-    height: 44px;
+    height: 48px;
     background: var(--bg-toolbar);
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     gap: 0.5rem;
     flex-shrink: 0;
     overflow-x: auto;
@@ -131,7 +154,11 @@ hr {
 
 .toolbar-group {
     display: flex;
-    gap: 2px;
+    gap: 4px;
+    background: var(--bg-app);
+    padding: 2px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
 }
 
 .toolbar button {
@@ -141,22 +168,25 @@ hr {
     height: 32px;
     border-radius: 4px;
     cursor: pointer;
-    color: var(--text-main);
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    transition: all 0.15s;
 }
 
 .toolbar button:hover {
-    background: var(--border-color);
+    background: var(--bg-hover);
+    color: var(--text-main);
 }
 
 .divider {
     width: 1px;
-    height: 20px;
+    height: 24px;
     background: var(--border-color);
-    margin: 0 0.5rem;
+    margin: 0 0.75rem;
+    opacity: 0.5;
 }
 
 /* Sidebar */
