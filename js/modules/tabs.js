@@ -15,6 +15,7 @@ export class Tabs {
 
         this.tabs = [];
         this.activeTabId = null;
+        this.closeConfirmModalPromise = null;
 
         this.init();
     }
@@ -164,7 +165,7 @@ export class Tabs {
 
         // Confirm if unsaved
         if (tab.unsaved) {
-            const confirmed = confirm('This document has unsaved changes. Close anyway?');
+            const confirmed = await this.confirmCloseTab(tab);
             if (!confirmed) return;
         }
 
@@ -196,6 +197,111 @@ export class Tabs {
             const newIndex = Math.min(tabIndex, this.tabs.length - 1);
             this.activateTab(this.tabs[newIndex].id);
         }
+    }
+
+    /**
+     * Confirm tab close for unsaved document using modal dialog
+     */
+    async confirmCloseTab(tab) {
+        const modal = this.getOrCreateCloseConfirmModal();
+        const titleEl = modal.querySelector('[data-close-title]');
+        if (titleEl) {
+            titleEl.textContent = tab.title || 'Untitled';
+        }
+
+        modal.hidden = false;
+
+        if (!this.closeConfirmModalPromise) {
+            this.closeConfirmModalPromise = new Promise((resolve) => {
+                const cleanup = () => {
+                    const cancelBtn = modal.querySelector('#confirm-close-tab-cancel');
+                    const closeBtn = modal.querySelector('#confirm-close-tab-x');
+                    const confirmBtn = modal.querySelector('#confirm-close-tab-confirm');
+                    const backdrop = modal.querySelector('.modal-backdrop');
+                    const escHandler = (e) => {
+                        if (e.key === 'Escape') {
+                            finish(false);
+                        }
+                    };
+
+                    cancelBtn?.removeEventListener('click', onCancel);
+                    closeBtn?.removeEventListener('click', onCancel);
+                    backdrop?.removeEventListener('click', onCancel);
+                    confirmBtn?.removeEventListener('click', onConfirm);
+                    document.removeEventListener('keydown', escHandler);
+                };
+
+                const finish = (value) => {
+                    cleanup();
+                    modal.hidden = true;
+                    this.closeConfirmModalPromise = null;
+                    resolve(value);
+                };
+
+                const onCancel = () => finish(false);
+                const onConfirm = () => finish(true);
+                const cancelBtn = modal.querySelector('#confirm-close-tab-cancel');
+                const closeBtn = modal.querySelector('#confirm-close-tab-x');
+                const confirmBtn = modal.querySelector('#confirm-close-tab-confirm');
+                const backdrop = modal.querySelector('.modal-backdrop');
+                const escHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        finish(false);
+                    }
+                };
+
+                cancelBtn?.addEventListener('click', onCancel);
+                closeBtn?.addEventListener('click', onCancel);
+                backdrop?.addEventListener('click', onCancel);
+                confirmBtn?.addEventListener('click', onConfirm);
+                document.addEventListener('keydown', escHandler);
+            });
+        }
+
+        return this.closeConfirmModalPromise;
+    }
+
+    /**
+     * Build close-confirm modal once and reuse it
+     */
+    getOrCreateCloseConfirmModal() {
+        let modal = document.getElementById('confirm-close-tab-modal');
+        if (modal) return modal;
+
+        modal = document.createElement('div');
+        modal.id = 'confirm-close-tab-modal';
+        modal.className = 'modal modal-small';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.setAttribute('aria-labelledby', 'confirm-close-tab-title');
+        modal.hidden = true;
+        modal.innerHTML = `
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="confirm-close-tab-title">Close Unsaved Document?</h2>
+                    <button id="confirm-close-tab-x" class="modal-close" aria-label="Close">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <strong data-close-title>Untitled</strong> has unsaved changes.
+                        Are you sure you want to close and delete it?
+                    </p>
+                    <div class="modal-actions" style="display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem;">
+                        <button id="confirm-close-tab-cancel" class="btn">Cancel</button>
+                        <button id="confirm-close-tab-confirm" class="btn btn-danger">Close & Delete</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        return modal;
     }
 
     /**

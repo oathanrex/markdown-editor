@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'md-editor-v2';
+const CACHE_NAME = 'md-editor-v3';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -57,15 +57,13 @@ self.addEventListener('install', (event) => {
             const cdnPromise = Promise.all(
                 CDN_ASSETS.map(url =>
                     fetch(url)
-                        .then(response => cache.put(url, response))
+                        .then(response => {
+                            if (response.ok) {
+                                return cache.put(url, response);
+                            }
+                        })
                         .catch(err => {
                             console.warn('Failed to cache CDN asset:', url);
-                            // Fallback: store a placeholder response
-                            cache.put(url, new Response('CDN asset unavailable', {
-                                status: 503,
-                                statusText: 'Service Unavailable',
-                                headers: { 'Content-Type': 'text/plain' }
-                            }));
                         })
                 )
             );
@@ -107,7 +105,7 @@ self.addEventListener('fetch', (event) => {
 
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
-            if (cachedResponse) {
+            if (cachedResponse && cachedResponse.status < 400) {
                 // Return cached response and update cache in background
                 event.waitUntil(
                     fetch(event.request)

@@ -305,20 +305,16 @@ export class Preview {
         // Update highlight.js theme
         const hljsLink = document.getElementById('hljs-theme');
         if (hljsLink) {
-            const lightThemeHref = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
-            const darkThemeHref = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
-            const lightThemeIntegrity = 'sha384-eFTL69TLRZTkNfYZOLM+G04821K1qZao/4QLJbet1pP4tcF+fdXq/9CdqAbWRl/L';
-            const darkThemeIntegrity = 'sha384-wH75j6z1lH97ZOpMOInqhgKzFkAInZPPSPlZpYKYTOqsaizPvhQZmAtLcPKXpLyH';
-
             if (theme === 'light') {
-                hljsLink.href = lightThemeHref;
-                hljsLink.integrity = lightThemeIntegrity;
+                hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
             } else {
-                hljsLink.href = darkThemeHref;
-                hljsLink.integrity = darkThemeIntegrity;
+                hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
             }
-            hljsLink.crossOrigin = 'anonymous';
-            hljsLink.referrerPolicy = 'no-referrer';
+            // Dynamic stylesheet swaps are sensitive to stale SW/CDN variants;
+            // drop SRI on runtime theme toggle to avoid false-negative integrity failures.
+            hljsLink.removeAttribute('integrity');
+            hljsLink.setAttribute('crossorigin', 'anonymous');
+            hljsLink.setAttribute('referrerpolicy', 'no-referrer');
         }
 
         // Re-render to apply theme changes
