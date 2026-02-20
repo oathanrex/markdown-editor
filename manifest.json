@@ -3,6 +3,7 @@
     "short_name": "MD Editor",
     "description": "Write beautiful Markdown with real-time preview, GitHub Flavored Markdown, LaTeX math, Mermaid diagrams, and syntax highlighting. Free & works offline!",
     "start_url": "./",
+    "scope": "./",
     "display": "standalone",
     "background_color": "#1a1a2e",
     "theme_color": "#7b68ee",
@@ -22,8 +23,8 @@
     "shortcuts": [
         {
             "name": "New Document",
-            "url": "./?action=new",
-            "description": "Create a new document"
+            "short_name": "New",
+            "url": "./?action=new"
         }
     ]
 }
