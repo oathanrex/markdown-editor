@@ -1,0 +1,229 @@
+/**
+ * Theme Styles
+ * Dark (Claude-inspired), Light, and High Contrast themes
+ */
+
+/* Dark Theme (Claude-inspired) - Default */
+[data-theme="dark"] {
+    /* Backgrounds */
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #0f3460;
+    --bg-hover: #1f4287;
+    --bg-input: #0d1b2a;
+
+    /* Text */
+    --text-primary: #e8e8e8;
+    --text-secondary: #a8a8a8;
+    --text-muted: #6b6b6b;
+    --text-inverse: #1a1a2e;
+
+    /* Borders */
+    --border-color: #2a2a4e;
+    --border-hover: #4a4a6e;
+
+    /* Accent Colors */
+    --accent-primary: #7b68ee;
+    --accent-hover: #9180f4;
+    --accent-primary-transparent: rgba(123, 104, 238, 0.2);
+
+    /* Status Colors */
+    --success: #4ade80;
+    --warning: #fbbf24;
+    --danger: #f87171;
+    --danger-hover: #ef4444;
+    --info: #60a5fa;
+
+    /* Editor Specific */
+    --line-number-color: #4a4a6e;
+    --line-number-bg: #141428;
+    --editor-bg: #0d0d1a;
+    --selection-bg: rgba(123, 104, 238, 0.3);
+    --selection-text: inherit;
+    --highlight-bg: rgba(255, 255, 0, 0.2);
+
+    /* Preview Specific */
+    --preview-bg: #1a1a2e;
+    --preview-code-bg: #0d0d1a;
+    --preview-blockquote-border: #7b68ee;
+    --preview-blockquote-bg: rgba(123, 104, 238, 0.1);
+    --preview-table-border: #2a2a4e;
+    --preview-table-header-bg: #16213e;
+    --preview-link-color: #7b68ee;
+
+    /* Scrollbar */
+    --scrollbar-thumb: #3a3a5e;
+    --scrollbar-thumb-hover: #4a4a6e;
+
+    /* Syntax Highlighting */
+    --syntax-keyword: #c792ea;
+    --syntax-string: #c3e88d;
+    --syntax-number: #f78c6c;
+    --syntax-comment: #546e7a;
+    --syntax-function: #82aaff;
+    --syntax-variable: #f07178;
+    --syntax-operator: #89ddff;
+
+    /* Diff Colors */
+    --diff-add-bg: rgba(74, 222, 128, 0.2);
+    --diff-add-text: #4ade80;
+    --diff-remove-bg: rgba(248, 113, 113, 0.2);
+    --diff-remove-text: #f87171;
+    --diff-change-bg: rgba(251, 191, 36, 0.2);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+    /* Backgrounds */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --bg-tertiary: #ebebeb;
+    --bg-hover: #e0e0e0;
+    --bg-input: #ffffff;
+
+    /* Text */
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --text-muted: #8a8a8a;
+    --text-inverse: #ffffff;
+
+    /* Borders */
+    --border-color: #d0d0d0;
+    --border-hover: #b0b0b0;
+
+    /* Accent Colors */
+    --accent-primary: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-primary-transparent: rgba(99, 102, 241, 0.2);
+
+    /* Status Colors */
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --info: #3b82f6;
+
+    /* Editor Specific */
+    --line-number-color: #8a8a8a;
+    --line-number-bg: #f5f5f5;
+    --editor-bg: #ffffff;
+    --selection-bg: rgba(99, 102, 241, 0.3);
+    --selection-text: inherit;
+    --highlight-bg: rgba(255, 255, 0, 0.4);
+
+    /* Preview Specific */
+    --preview-bg: #ffffff;
+    --preview-code-bg: #f5f5f5;
+    --preview-blockquote-border: #6366f1;
+    --preview-blockquote-bg: rgba(99, 102, 241, 0.05);
+    --preview-table-border: #d0d0d0;
+    --preview-table-header-bg: #f5f5f5;
+    --preview-link-color: #6366f1;
+
+    /* Scrollbar */
+    --scrollbar-thumb: #c0c0c0;
+    --scrollbar-thumb-hover: #a0a0a0;
+
+    /* Syntax Highlighting */
+    --syntax-keyword: #8b5cf6;
+    --syntax-string: #16a34a;
+    --syntax-number: #ea580c;
+    --syntax-comment: #6b7280;
+    --syntax-function: #2563eb;
+    --syntax-variable: #dc2626;
+    --syntax-operator: #0891b2;
+
+    /* Diff Colors */
+    --diff-add-bg: rgba(34, 197, 94, 0.2);
+    --diff-add-text: #16a34a;
+    --diff-remove-bg: rgba(239, 68, 68, 0.2);
+    --diff-remove-text: #dc2626;
+    --diff-change-bg: rgba(245, 158, 11, 0.2);
+}
+
+
+
+/* High Contrast Theme */
+[data-theme="high-contrast"] {
+    /* Backgrounds */
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-tertiary: #1a1a1a;
+    --bg-hover: #2a2a2a;
+    --bg-input: #000000;
+
+    /* Text */
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --text-inverse: #000000;
+
+    /* Borders */
+    --border-color: #ffffff;
+    --border-hover: #ffff00;
+
+    /* Accent Colors */
+    --accent-primary: #00ffff;
+    --accent-hover: #00cccc;
+    --accent-primary-transparent: rgba(0, 255, 255, 0.3);
+
+    /* Status Colors */
+    --success: #00ff00;
+    --warning: #ffff00;
+    --danger: #ff0000;
+    --danger-hover: #cc0000;
+    --info: #00ffff;
+
+    /* Editor Specific */
+    --line-number-color: #888888;
+    --line-number-bg: #0a0a0a;
+    --editor-bg: #000000;
+    --selection-bg: rgba(0, 255, 255, 0.4);
+    --selection-text: #000000;
+    --highlight-bg: rgba(255, 255, 0, 0.5);
+
+    /* Preview Specific */
+    --preview-bg: #000000;
+    --preview-code-bg: #1a1a1a;
+    --preview-blockquote-border: #00ffff;
+    --preview-blockquote-bg: rgba(0, 255, 255, 0.1);
+    --preview-table-border: #ffffff;
+    --preview-table-header-bg: #1a1a1a;
+    --preview-link-color: #00ffff;
+
+    /* Scrollbar */
+    --scrollbar-thumb: #444444;
+    --scrollbar-thumb-hover: #666666;
+
+    /* Syntax Highlighting */
+    --syntax-keyword: #ff00ff;
+    --syntax-string: #00ff00;
+    --syntax-number: #ffff00;
+    --syntax-comment: #888888;
+    --syntax-function: #00ffff;
+    --syntax-variable: #ff8800;
+    --syntax-operator: #ffffff;
+
+    /* Diff Colors */
+    --diff-add-bg: rgba(0, 255, 0, 0.3);
+    --diff-add-text: #00ff00;
+    --diff-remove-bg: rgba(255, 0, 0, 0.3);
+    --diff-remove-text: #ff0000;
+    --diff-change-bg: rgba(255, 255, 0, 0.3);
+}
+
+/* High contrast mode has thicker borders and focus indicators */
+[data-theme="high-contrast"] :focus {
+    outline: 3px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+[data-theme="high-contrast"] .btn {
+    border-width: 2px;
+}
+
+[data-theme="high-contrast"] input,
+[data-theme="high-contrast"] select,
+[data-theme="high-contrast"] textarea {
+    border-width: 2px;
+}

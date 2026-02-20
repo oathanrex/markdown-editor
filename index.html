@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Tired of hidden fees and logins? Use this privacy-first Online Markdown Editor for free. Write GitHub Flavored Markdown, render LaTeX math, and build diagrams offline in your browser.">
+    <meta name="keywords"
+        content="markdown editor, privacy-focused writer, offline markdown tool, browser-based text editor, GFM support, latex math rendering, mermaid diagram builder, free developer tools, no-login writer">
+    <meta name="author" content="oathanrex">
+    <meta name="robots" content="index, follow">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%231a1a2e' width='180' height='180'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='middle' font-family='Arial'>MD</text></svg>">
+
+    <!-- Security: Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
+                   style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
+                   font-src 'self' https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https:; 
+                   connect-src 'self' https://cdnjs.cloudflare.com;">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://oathanrex.github.io/markdown-editor/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oathanrex.github.io/markdown-editor/">
+    <meta property="og:title" content="Free Online Markdown Editor - Write, Preview & Export">
+    <meta property="og:description"
+        content="Write, preview, and export Markdown without limits. Privacy-focused, works offline, and supports LaTeX & Mermaid diagrams. Try it now!">
+    <meta property="og:image" content="https://oathanrex.github.io/markdown-editor/preview.png">
+    <meta property="og:site_name" content="Markdown Editor by oathanrex">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://oathanrex.github.io/markdown-editor/">
+    <meta name="twitter:title" content="Free Online Markdown Editor - Write, Preview & Export">
+    <meta name="twitter:description"
+        content="Write, preview, and export Markdown without limits. Privacy-focused, works offline, and supports LaTeX & Mermaid diagrams. Try it now!">
+    <meta name="twitter:image" content="https://oathanrex.github.io/markdown-editor/preview.png">
+
+    <title>Free Online Markdown Editor - Real-Time Preview | oathanrex</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/editor.css">
+    <link rel="stylesheet" href="css/preview.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
+
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"
+        integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Markdown Editor by oathanrex",
+          "url": "https://oathanrex.github.io/markdown-editor/",
+          "description": "Tired of hidden fees and logins? Use this privacy-first Online Markdown Editor for free. Write GitHub Flavored Markdown, render LaTeX math, and build diagrams offline in your browser.",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Any",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "screenshot": "https://oathanrex.github.io/markdown-editor/preview.webp",
+          "featureList": [
+            "Real-time Markdown Preview",
+            "GitHub Flavored Markdown (GFM)",
+            "LaTeX Mathematical Formulas",
+            "Mermaid Diagram Rendering",
+            "Syntax Highlighting",
+            "Offline Capabilities"
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is this Markdown editor free to use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, it is a completely free, open-source tool with no registration required."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does it support LaTeX math equations?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, it includes full KaTeX integration for high-quality mathematical formula rendering."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+        integrity="sha384-wH75j6z1lH97ZOpMOInqhgKzFkAInZPPSPlZpYKYTOqsaizPvhQZmAtLcPKXpLyH" crossorigin="anonymous"
+        id="hljs-theme">
+</head>
+
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#editor-textarea" class="skip-link">Skip to editor</a>
+
+    <!-- Main Application Container -->
+    <div id="app" class="app-container" role="application" aria-label="Markdown Editor">
+
+        <!-- Header / Toolbar -->
+        <header class="toolbar" role="toolbar" aria-label="Editor toolbar">
+            <div class="toolbar-left">
+                <button id="menu-toggle" class="toolbar-btn" aria-label="Toggle menu" aria-expanded="false">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <h1 class="app-title">Markdown Editor</h1>
+                <span class="app-subtitle">by
+                    oathanrex</span>
+            </div>
+
+            <div class="toolbar-center">
+                <!-- Document Tabs -->
+                <div id="tabs-container" class="tabs-container" role="tablist" aria-label="Open documents">
+                    <!-- Tabs will be dynamically inserted here -->
+                </div>
+                <button id="new-tab-btn" class="toolbar-btn" aria-label="New document" title="New document (Ctrl+N)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="toolbar-right">
+                <!-- View Controls -->
+                <div class="btn-group" role="group" aria-label="View options">
+                    <button id="view-editor" class="toolbar-btn active" aria-pressed="true" title="Editor only">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                        </svg>
+                    </button>
+                    <button id="view-split" class="toolbar-btn" aria-pressed="false" title="Split view">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                            <line x1="12" y1="3" x2="12" y2="21"></line>
+                        </svg>
+                    </button>
+                    <button id="view-preview" class="toolbar-btn" aria-pressed="false" title="Preview only">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Zen Mode -->
+                <button id="zen-mode-btn" class="toolbar-btn" aria-pressed="false" title="Zen mode (F11)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+                        </path>
+                    </svg>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="toolbar-btn" aria-label="Toggle theme" title="Toggle theme">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="sun-icon">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        class="moon-icon">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <!-- Settings -->
+                <button id="settings-btn" class="toolbar-btn" aria-label="Settings" title="Settings">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Secondary Toolbar - Formatting -->
+        <div class="formatting-toolbar" role="toolbar" aria-label="Formatting options">
+            <div class="format-group">
+                <button class="format-btn" data-action="bold" title="Bold (Ctrl+B)" aria-label="Bold">
+                    <strong>B</strong>
+                </button>
+                <button class="format-btn" data-action="italic" title="Italic (Ctrl+I)" aria-label="Italic">
+                    <em>I</em>
+                </button>
+                <button class="format-btn" data-action="strikethrough" title="Strikethrough (Ctrl+Shift+S)"
+                    aria-label="Strikethrough">
+                    <s>S</s>
+                </button>
+                <button class="format-btn" data-action="code" title="Inline code (Ctrl+`)" aria-label="Inline code">
+                    <code>&lt;&gt;</code>
+                </button>
+            </div>
+
+            <div class="format-separator"></div>
+
+            <div class="format-group">
+                <button class="format-btn" data-action="h1" title="Heading 1 (Ctrl+1)"
+                    aria-label="Heading 1">H1</button>
+                <button class="format-btn" data-action="h2" title="Heading 2 (Ctrl+2)"
+                    aria-label="Heading 2">H2</button>
+                <button class="format-btn" data-action="h3" title="Heading 3 (Ctrl+3)"
+                    aria-label="Heading 3">H3</button>
+            </div>
+
+            <div class="format-separator"></div>
+
+            <div class="format-group">
+                <button class="format-btn" data-action="ul" title="Bullet list (Ctrl+Shift+U)" aria-label="Bullet list">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <circle cx="4" cy="6" r="1" fill="currentColor"></circle>
+                        <circle cx="4" cy="12" r="1" fill="currentColor"></circle>
+                        <circle cx="4" cy="18" r="1" fill="currentColor"></circle>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="ol" title="Numbered list (Ctrl+Shift+O)"
+                    aria-label="Numbered list">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="10" y1="6" x2="21" y2="6"></line>
+                        <line x1="10" y1="12" x2="21" y2="12"></line>
+                        <line x1="10" y1="18" x2="21" y2="18"></line>
+                        <text x="3" y="8" font-size="8" fill="currentColor">1</text>
+                        <text x="3" y="14" font-size="8" fill="currentColor">2</text>
+                        <text x="3" y="20" font-size="8" fill="currentColor">3</text>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="tasklist" title="Task list (Ctrl+Shift+T)"
+                    aria-label="Task list">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="5" width="6" height="6" rx="1"></rect>
+                        <path d="M5 8l1 1 2-2"></path>
+                        <line x1="12" y1="8" x2="21" y2="8"></line>
+                        <rect x="3" y="14" width="6" height="6" rx="1"></rect>
+                        <line x1="12" y1="17" x2="21" y2="17"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="format-separator"></div>
+
+            <div class="format-group">
+                <button class="format-btn" data-action="quote" title="Blockquote (Ctrl+Shift+Q)"
+                    aria-label="Blockquote">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z">
+                        </path>
+                        <path
+                            d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z">
+                        </path>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="codeblock" title="Code block (Ctrl+Shift+C)"
+                    aria-label="Code block">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16,18 22,12 16,6"></polyline>
+                        <polyline points="8,6 2,12 8,18"></polyline>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="link" title="Insert link (Ctrl+K)" aria-label="Insert link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="image" title="Insert image (Ctrl+Shift+I)"
+                    aria-label="Insert image">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="table" title="Insert table (Ctrl+Shift+T)"
+                    aria-label="Insert table">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="3" y1="15" x2="21" y2="15"></line>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                        <line x1="15" y1="3" x2="15" y2="21"></line>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="hr" title="Horizontal rule (Ctrl+Shift+H)"
+                    aria-label="Horizontal rule">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="format-separator"></div>
+
+            <div class="format-group">
+                <button class="format-btn" data-action="math" title="Insert LaTeX math" aria-label="Insert math">
+                    <span class="math-button-icon">∑</span>
+                </button>
+                <button class="format-btn" data-action="mermaid" title="Insert Mermaid diagram"
+                    aria-label="Insert Mermaid diagram">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="6" height="6" rx="1"></rect>
+                        <rect x="15" y="3" width="6" height="6" rx="1"></rect>
+                        <rect x="9" y="15" width="6" height="6" rx="1"></rect>
+                        <line x1="6" y1="9" x2="6" y2="12"></line>
+                        <line x1="18" y1="9" x2="18" y2="12"></line>
+                        <line x1="6" y1="12" x2="18" y2="12"></line>
+                        <line x1="12" y1="12" x2="12" y2="15"></line>
+                    </svg>
+                </button>
+                <button class="format-btn" data-action="emoji" title="Insert emoji" aria-label="Insert emoji">
+                    😀
+                </button>
+            </div>
+
+            <div class="format-separator"></div>
+
+            <!-- Word wrap toggle -->
+            <button id="word-wrap-btn" class="format-btn active" aria-pressed="true" title="Toggle word wrap">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18"></path>
+                    <path d="M3 12h15a3 3 0 1 1 0 6h-4"></path>
+                    <polyline points="13 16 16 19 13 22"></polyline>
+                    <path d="M3 18h7"></path>
+                </svg>
+            </button>
+
+            <!-- Find/Replace -->
+            <button id="find-replace-btn" class="format-btn" title="Find and replace (Ctrl+F)"
+                aria-label="Find and replace">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+
+            <div class="toolbar-spacer"></div>
+
+            <!-- Import/Export -->
+            <div class="format-group">
+                <button id="import-btn" class="format-btn" title="Import file" aria-label="Import file">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+                <button id="export-btn" class="format-btn" title="Export file" aria-label="Export file">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- History -->
+            <button id="history-btn" class="format-btn" title="Version history" aria-label="Version history">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Find/Replace Panel -->
+        <div id="find-replace-panel" class="find-replace-panel" role="search" aria-label="Find and replace" hidden>
+            <div class="find-row">
+                <input type="text" id="find-input" class="find-input" placeholder="Find..." aria-label="Find text">
+                <span id="match-count" class="match-count">0 of 0</span>
+                <button id="find-prev" class="find-btn" title="Previous match (Shift+Enter)"
+                    aria-label="Previous match">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                </button>
+                <button id="find-next" class="find-btn" title="Next match (Enter)" aria-label="Next match">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <button id="close-find" class="find-btn" title="Close (Esc)" aria-label="Close find panel">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="replace-row">
+                <input type="text" id="replace-input" class="find-input" placeholder="Replace..."
+                    aria-label="Replace text">
+                <button id="replace-one" class="find-btn text-btn" title="Replace current">Replace</button>
+                <button id="replace-all" class="find-btn text-btn" title="Replace all">Replace All</button>
+            </div>
+            <div class="find-options">
+                <label class="find-option">
+                    <input type="checkbox" id="find-case-sensitive">
+                    <span>Match case</span>
+                </label>
+                <label class="find-option">
+                    <input type="checkbox" id="find-whole-word">
+                    <span>Whole word</span>
+                </label>
+                <label class="find-option">
+                    <input type="checkbox" id="find-regex">
+                    <span>Regex</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Sidebar - TOC & Outline -->
+            <aside id="sidebar" class="sidebar" role="complementary" aria-label="Document outline">
+                <div class="sidebar-header">
+                    <h2>Outline</h2>
+                    <button id="sidebar-close" class="sidebar-close-btn" aria-label="Close sidebar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <nav id="toc-container" class="toc-container" aria-label="Table of contents">
+                    <ul id="toc-list" class="toc-list" role="tree">
+                        <!-- TOC items will be dynamically inserted -->
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Editor Pane -->
+            <div id="editor-pane" class="editor-pane">
+                <div class="editor-wrapper">
+                    <!-- Line Numbers -->
+                    <div id="line-numbers" class="line-numbers" aria-hidden="true">
+                        <div class="line-number">1</div>
+                    </div>
+
+                    <!-- Editor Textarea -->
+                    <textarea id="editor-textarea" class="editor-textarea" spellcheck="true" autocomplete="off"
+                        aria-label="Markdown editor" placeholder="Start writing your Markdown here...
+
+# Hi! Ready to write something amazing? 👋
+
+This isn't just another editor—it's your **private**, distraction-free writing space. 
+
+### Why you'll love writing here:
+- **Everything stays local:** We never see your data. It lives in your browser.
+- **Works offline:** No internet? No problem.
+- **Rich features:** Math, diagrams, and code highlighting are built-in.
+
+---
+
+### 🚀 Quick Start Guide
+
+1. **Format freely**: Use **bold**, *italics*, or `inline code` easily.
+2. **Organize**: Create tasks and lists:
+   - [x] Draft my next big idea
+   - [ ] Export to PDF
+3. **Visualize**: Need a chart? Try Mermaid:
+   ```mermaid
+   graph LR
+   A[Idea] --> B(Draft)
+   B --> C{Success!}
+   ```
+4. **Do the Math**: $ E = mc^2 $ just works.
+
+*Go ahead, clear this text and start creating!* ✨"></textarea>
+                </div>
+
+                <!-- Editor Status Bar -->
+                <div class="editor-status-bar" role="status" aria-live="polite">
+                    <span id="cursor-position">Ln 1, Col 1</span>
+                    <span id="word-count">0 words</span>
+                    <span id="char-count">0 characters</span>
+                    <span id="save-status">Saved</span>
+                </div>
+            </div>
+
+            <!-- Resize Handle -->
+            <div id="resize-handle" class="resize-handle" role="separator" aria-orientation="vertical"
+                aria-label="Resize editor and preview"></div>
+
+            <!-- Preview Pane -->
+            <div id="preview-pane" class="preview-pane">
+                <div id="preview-content" class="preview-content markdown-body" role="article"
+                    aria-label="Rendered preview">
+                    <!-- Preview content will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Minimap -->
+            <div id="minimap" class="minimap" aria-hidden="true">
+                <canvas id="minimap-canvas"></canvas>
+                <div id="minimap-viewport" class="minimap-viewport"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal" role="dialog" aria-labelledby="settings-title" aria-modal="true" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="settings-title">Settings</h2>
+                <button class="modal-close" aria-label="Close settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="setting-item">
+                        <label for="theme-select">Theme</label>
+                        <select id="theme-select">
+                            <option value="dark">Dark (Claude)</option>
+                            <option value="light">Light</option>
+                            <option value="high-contrast">High Contrast</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="font-size">Editor Font Size</label>
+                        <input type="range" id="font-size" min="12" max="24" value="14">
+                        <span id="font-size-value">14px</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="font-family">Editor Font</label>
+                        <select id="font-family">
+                            <option value="'JetBrains Mono', 'Fira Code', monospace">JetBrains Mono</option>
+                            <option value="'Fira Code', monospace">Fira Code</option>
+                            <option value="'Source Code Pro', monospace">Source Code Pro</option>
+                            <option value="monospace">System Mono</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="show-line-numbers" checked>
+                            Show line numbers
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="show-minimap" checked>
+                            Show minimap
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Editor</h3>
+                    <div class="setting-item">
+                        <label for="tab-size">Tab Size</label>
+                        <select id="tab-size">
+                            <option value="2">2 spaces</option>
+                            <option value="4" selected>4 spaces</option>
+                            <option value="8">8 spaces</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="auto-save-interval">Auto-save interval</label>
+                        <select id="auto-save-interval">
+                            <option value="5000">5 seconds</option>
+                            <option value="10000" selected>10 seconds</option>
+                            <option value="30000">30 seconds</option>
+                            <option value="60000">1 minute</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="snapshot-interval">Snapshot interval</label>
+                        <select id="snapshot-interval">
+                            <option value="60000">1 minute</option>
+                            <option value="300000" selected>5 minutes</option>
+                            <option value="600000">10 minutes</option>
+                            <option value="1800000">30 minutes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Security</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="enable-encryption">
+                            Enable document encryption
+                        </label>
+                    </div>
+                    <div id="encryption-settings" class="encryption-settings" hidden>
+                        <div class="setting-item">
+                            <label for="encryption-passphrase">Passphrase</label>
+                            <input type="password" id="encryption-passphrase" placeholder="Enter passphrase">
+                        </div>
+                        <div class="setting-item">
+                            <label for="encryption-passphrase-confirm">Confirm Passphrase</label>
+                            <input type="password" id="encryption-passphrase-confirm" placeholder="Confirm passphrase">
+                        </div>
+                        <button id="set-passphrase-btn" class="btn btn-primary">Set Passphrase</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Data</h3>
+                    <div class="setting-item">
+                        <button id="export-all-btn" class="btn">Export All Documents</button>
+                        <button id="clear-data-btn" class="btn btn-danger">Clear All Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="modal" role="dialog" aria-labelledby="history-title" aria-modal="true" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="history-title">Version History</h2>
+                <button class="modal-close" aria-label="Close history">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body history-body">
+                <div class="history-list-container">
+                    <h3>Snapshots</h3>
+                    <ul id="history-list" class="history-list" role="listbox" aria-label="Version snapshots">
+                        <!-- History items will be dynamically inserted -->
+                    </ul>
+                </div>
+                <div class="history-preview-container">
+                    <div class="history-actions">
+                        <button id="restore-version-btn" class="btn btn-primary" disabled>Restore This Version</button>
+                        <button id="compare-versions-btn" class="btn" disabled>Compare Selected</button>
+                    </div>
+                    <div id="history-preview" class="history-preview">
+                        <p class="placeholder-text">Select a version to preview</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diff Modal -->
+    <div id="diff-modal" class="modal" role="dialog" aria-labelledby="diff-title" aria-modal="true" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-full">
+            <div class="modal-header">
+                <h2 id="diff-title">Compare Versions</h2>
+                <button class="modal-close" aria-label="Close diff view">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="diff-container" class="diff-container">
+                    <!-- Diff view will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal" role="dialog" aria-labelledby="export-title" aria-modal="true" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="export-title">Export Document</h2>
+                <button class="modal-close" aria-label="Close export">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <button class="export-option" data-format="md">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span>Markdown (.md)</span>
+                    </button>
+                    <button class="export-option" data-format="html">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                        <span>HTML (.html)</span>
+                    </button>
+                    <button class="export-option" data-format="pdf">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <span>Print / PDF</span>
+                    </button>
+                </div>
+                <div class="export-clipboard">
+                    <h3>Copy to Clipboard</h3>
+                    <div class="clipboard-options">
+                        <button id="copy-markdown-btn" class="btn">Copy Markdown</button>
+                        <button id="copy-html-btn" class="btn">Copy HTML</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal" role="dialog" aria-labelledby="import-title" aria-modal="true" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="import-title">Import Document</h2>
+                <button class="modal-close" aria-label="Close import">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="drop-zone" class="drop-zone" role="button" tabindex="0"
+                    aria-label="Drop files here or click to select">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <p>Drop files here or click to select</p>
+                    <p class="drop-zone-hint">Supports .md, .txt, and .html files</p>
+                </div>
+                <input type="file" id="file-input" accept=".md,.txt,.html,.htm" multiple hidden>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emoji Picker Modal -->
+    <div id="emoji-modal" class="modal modal-small" role="dialog" aria-labelledby="emoji-title" aria-modal="true"
+        hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="emoji-title">Insert Emoji</h2>
+                <button class="modal-close" aria-label="Close emoji picker">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="emoji-search" class="emoji-search" placeholder="Search emojis..."
+                    aria-label="Search emojis">
+                <div id="emoji-grid" class="emoji-grid" role="listbox" aria-label="Emoji list">
+                    <!-- Emojis will be dynamically inserted -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link Modal -->
+    <div id="link-modal" class="modal modal-small" role="dialog" aria-labelledby="link-title" aria-modal="true" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="link-title">Insert Link</h2>
+                <button class="modal-close" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="link-text">Link Text</label>
+                    <input type="text" id="link-text" placeholder="Display text">
+                </div>
+                <div class="form-group">
+                    <label for="link-url">URL</label>
+                    <input type="url" id="link-url" placeholder="https://example.com">
+                </div>
+                <button id="insert-link-btn" class="btn btn-primary">Insert Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="modal modal-small" role="dialog" aria-labelledby="image-title" aria-modal="true"
+        hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="image-title">Insert Image</h2>
+                <button class="modal-close" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="image-alt">Alt Text</label>
+                    <input type="text" id="image-alt" placeholder="Image description">
+                </div>
+                <div class="form-group">
+                    <label for="image-url">Image URL</label>
+                    <input type="url" id="image-url" placeholder="https://example.com/image.png">
+                </div>
+                <button id="insert-image-btn" class="btn btn-primary">Insert Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Modal -->
+    <div id="table-modal" class="modal modal-small" role="dialog" aria-labelledby="table-title" aria-modal="true"
+        hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="table-title">Insert Table</h2>
+                <button class="modal-close" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="table-rows">Rows</label>
+                    <input type="number" id="table-rows" value="3" min="1" max="20">
+                </div>
+                <div class="form-group">
+                    <label for="table-cols">Columns</label>
+                    <input type="number" id="table-cols" value="3" min="1" max="10">
+                </div>
+                <button id="insert-table-btn" class="btn btn-primary">Insert Table</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container" role="alert" aria-live="polite"></div>
+
+    <!-- Keyboard Shortcuts Help -->
+    <div id="shortcuts-modal" class="modal" role="dialog" aria-labelledby="shortcuts-title" aria-modal="true" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="shortcuts-title">Keyboard Shortcuts</h2>
+                <button class="modal-close" aria-label="Close shortcuts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body shortcuts-body">
+                <div class="shortcuts-column">
+                    <h3>Formatting</h3>
+                    <dl class="shortcuts-list">
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>B</kbd></dt>
+                            <dd>Bold</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>I</kbd></dt>
+                            <dd>Italic</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>`</kbd></dt>
+                            <dd>Inline code</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>K</kbd></dt>
+                            <dd>Insert link</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>1-6</kbd></dt>
+                            <dd>Heading 1-6</dd>
+                        </div>
+                    </dl>
+                </div>
+                <div class="shortcuts-column">
+                    <h3>Editing</h3>
+                    <dl class="shortcuts-list">
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>Z</kbd></dt>
+                            <dd>Undo</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>Y</kbd></dt>
+                            <dd>Redo</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>F</kbd></dt>
+                            <dd>Find</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>H</kbd></dt>
+                            <dd>Replace</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>S</kbd></dt>
+                            <dd>Save</dd>
+                        </div>
+                    </dl>
+                </div>
+                <div class="shortcuts-column">
+                    <h3>Navigation</h3>
+                    <dl class="shortcuts-list">
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>N</kbd></dt>
+                            <dd>New document</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>Tab</kbd></dt>
+                            <dd>Next tab</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd></dt>
+                            <dd>Previous tab</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>F11</kbd></dt>
+                            <dd>Zen mode</dd>
+                        </div>
+                        <div>
+                            <dt><kbd>?</kbd></dt>
+                            <dd>Show shortcuts</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section (Hidden, for SEO and AdSense) -->
+    <section id="about-section" class="about-section" hidden aria-hidden="true">
+        <article class="about-content">
+            <h2>Why Use This Online Markdown Editor?</h2>
+            <p>Let's face it: writing documentation or blog posts shouldn't be a hassle. You shouldn't have to sign up,
+                pay a subscription, or install heavy software just to format some text. That's why we built this **free,
+                privacy-first editor**.</p>
+            <p>Whether you're a developer tweaking a README, a student writing a paper with math formulas, or just
+                someone who loves the simplicity of Markdown, this tool is designed to get out of your way and let you
+                write.</p>
+
+            <h3>Designed for Real World Use Cases</h3>
+            <ul>
+                <li><strong>For Developers:</strong> Write GitHub-ready documentation with full GFM support and syntax
+                    highlighting for 50+ languages.</li>
+                <li><strong>For Students & Researchers:</strong> seamless LaTeX $E=mc^2$ support makes technical writing
+                    a breeze.</li>
+                <li><strong>For Privacy Advocates:</strong> Your keystrokes never leave your device. Everything is saved
+                    locally in your browser.</li>
+                <li><strong>For Offline Work:</strong> On a flight or spotty Wi-Fi? The app works 100% offline once
+                    loaded.</li>
+            </ul>
+
+            <h3>Frequently Asked Questions</h3>
+            <div class="faq-container">
+                <!-- Changed to div structure for better styling control if needed, keeping schema logic logic separate if preferred, but here keeping DL for schema consistency -->
+                <dl class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
+                    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <dt itemprop="name">Do I need to create an account or pay?</dt>
+                        <dd itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p itemprop="text"><strong>No and No.</strong> This tool is completely free and open-source.
+                                There are no logins, no paywalls, and no hidden "pro" features. Just open the page and
+                                write.</p>
+                        </dd>
+                    </div>
+                    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <dt itemprop="name">Is my writing safe? Where is it stored?</dt>
+                        <dd itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p itemprop="text"><strong>Your data never leaves your computer.</strong> Unlike other cloud
+                                editors, we rely entirely on your browser's Local Storage. We cannot read, see, or sell
+                                your documents because we simply don't have access to them.</p>
+                        </dd>
+                    </div>
+                    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <dt itemprop="name">Can I use this without an internet connection?</dt>
+                        <dd itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p itemprop="text"><strong>Yes!</strong> This is a Progressive Web App (PWA). Once you visit
+                                the site, it installs necessary files to your device, allowing you to open and use the
+                                editor fully offline, just like a native desktop app.</p>
+                        </dd>
+                    </div>
+                    <div itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                        <dt itemprop="name">How do I save my work locally?</dt>
+                        <dd itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                            <p itemprop="text">While autosave keeps your work safe in the browser, you can click the
+                                <strong>Export</strong> button to download your file as a standardized `.md` Markdown
+                                file, a raw `.html` file, or generate a PDF for sharing.
+                            </p>
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </article>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+        <p>Built for privacy-conscious writers.</p>
+        <p>Made with ❤️ by <a href="https://oathanrex.github.io"
+                target="_blank" rel="noopener noreferrer">oathanrex</a></p>
+        <nav aria-label="Social links">
+            <a href="https://github.com/oathanrex" target="_blank" rel="noopener noreferrer" title="GitHub">GitHub</a>
+            <a href="https://youtube.com/@oathanrex" target="_blank" rel="noopener noreferrer" title="YouTube">YouTube</a>
+            <a href="https://codepen.io/oathanrex" target="_blank" rel="noopener noreferrer" title="CodePen">CodePen</a>
+            <a href="https://www.buymeacoffee.com/oathanrex" target="_blank" rel="noopener noreferrer" title="Support">Buy Me a
+                Coffee</a>
+            <a href="https://oathanrex.blogspot.com" target="_blank" rel="noopener noreferrer" title="Blog">Blog</a>
+        </nav>
+        <p>© 2025 Markdown Editor. Open Source &
+            Free Forever.</p>
+    </footer>
+
+
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+        integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"
+        integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"
+        integrity="sha384-+NGfjU8KzpDLXRHduEqW+ZiJr2rIg+cidUVk7B51R5xK7cHwMKQfrdFwGdrq1Bcz"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"
+        integrity="sha384-cwS6YdhLI7XS60eoDiC+egV0qHp8zI+Cms46R0nbn8JrmoAzV9uFL60etMZhAnSu"
+        crossorigin="anonymous"></script>
+
+    <!-- Application Scripts -->
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
