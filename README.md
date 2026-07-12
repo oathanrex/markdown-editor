@@ -38,4 +38,3 @@ https://oathanrex.github.io/markdown-editor/
 ## 📜 License
 This project is Open-source and free forever.
 Made with ❤️ by **oathanrex**
-```
