@@ -1,1 +1,0 @@
-Disable in-editor JS TS validation to stop phantom stale-buffer errors
