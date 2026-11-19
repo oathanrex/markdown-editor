@@ -90,8 +90,9 @@
 }
 
 .toc-link.active {
-    background: var(--accent-primary-transparent);
-    color: var(--accent-primary);
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .toc-item[data-level="1"] .toc-link {
@@ -302,19 +303,24 @@
 
 .setting-item input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    background: var(--accent-primary);
-    border: 2px solid var(--bg-primary);
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border: 2px solid #18181b;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+[data-theme="light"] .setting-item input[type="range"]::-webkit-slider-thumb {
+    border-color: #0284c7;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
 .setting-item input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    transform: scale(1.2);
 }
 
 .encryption-settings {
@@ -366,8 +372,8 @@
 }
 
 .history-item.selected {
-    background: var(--accent-primary-transparent);
-    border-left: 3px solid var(--accent-primary);
+    background: var(--bg-hover);
+    border-left: 3px solid var(--text-primary);
 }
 
 .history-item-date {
@@ -490,14 +496,14 @@
 }
 
 .export-option:hover {
-    border-color: var(--accent-primary);
-    background: var(--accent-primary-transparent);
+    border-color: var(--border-hover);
+    background: var(--bg-hover);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.18);
+    box-shadow: var(--shadow-md);
 }
 
 .export-option svg {
-    color: var(--accent-primary);
+    color: var(--text-primary);
 }
 
 .export-option span {

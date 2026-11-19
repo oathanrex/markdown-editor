@@ -1,75 +1,75 @@
 /**
  * Theme Styles
- * Obsidian Dark Mode & Porcelain Light Mode (Oathan Rex Design System)
+ * Obsidian Titanium & Porcelain Zinc (Matching CSS Studio Pro Design System)
  */
 
 /* Obsidian Dark Theme - Default */
 [data-theme="dark"] {
     /* Backgrounds */
     --bg-primary: #08090d;
-    --bg-secondary: #111218;
-    --bg-tertiary: #181922;
-    --bg-hover: #222330;
-    --bg-input: #111218;
+    --bg-secondary: #090a0f;
+    --bg-tertiary: #18181b;
+    --bg-hover: #27272a;
+    --bg-input: #090a0f;
 
     /* Text */
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
     --text-inverse: #08090d;
 
     /* Borders */
-    --border-color: #232530;
-    --border-hover: #323544;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.16);
 
-    /* Accent Colors (Luminous Drafting Emerald) */
-    --accent-primary: #10b981;
-    --accent-hover: #34d399;
-    --accent-primary-transparent: rgba(16, 185, 129, 0.15);
+    /* Accent Colors (Titanium Obsidian High-Contrast) */
+    --accent-primary: #f4f4f5;
+    --accent-hover: #ffffff;
+    --accent-primary-transparent: rgba(255, 255, 255, 0.1);
 
     /* Status Colors */
-    --success: #34d399;
-    --warning: #fbbf24;
-    --danger: #f87171;
-    --danger-hover: #ef4444;
+    --success: #107c41;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
     --info: #38bdf8;
 
     /* Editor Specific */
-    --line-number-color: #64748b;
-    --line-number-bg: #0b0c12;
-    --editor-bg: #0b0c12;
-    --selection-bg: rgba(16, 185, 129, 0.25);
+    --line-number-color: #52525b;
+    --line-number-bg: #090a0f;
+    --editor-bg: #08090d;
+    --selection-bg: rgba(255, 255, 255, 0.15);
     --selection-text: inherit;
-    --highlight-bg: rgba(251, 191, 36, 0.25);
+    --highlight-bg: rgba(245, 158, 11, 0.25);
 
     /* Preview Specific */
     --preview-bg: #08090d;
-    --preview-code-bg: #111218;
-    --preview-blockquote-border: #10b981;
-    --preview-blockquote-bg: rgba(16, 185, 129, 0.08);
-    --preview-table-border: #232530;
-    --preview-table-header-bg: #111218;
-    --preview-link-color: #34d399;
+    --preview-code-bg: #090a0f;
+    --preview-blockquote-border: #52525b;
+    --preview-blockquote-bg: rgba(255, 255, 255, 0.03);
+    --preview-table-border: rgba(255, 255, 255, 0.08);
+    --preview-table-header-bg: #18181b;
+    --preview-link-color: #60a5fa;
 
     /* Scrollbar */
-    --scrollbar-thumb: #232530;
+    --scrollbar-thumb: #27272a;
     --scrollbar-thumb-hover: #3f3f46;
 
     /* Syntax Highlighting */
     --syntax-keyword: #f472b6;
-    --syntax-string: #34d399;
+    --syntax-string: #38bdf8;
     --syntax-number: #fb923c;
-    --syntax-comment: #64748b;
-    --syntax-function: #38bdf8;
+    --syntax-comment: #71717a;
+    --syntax-function: #a78bfa;
     --syntax-variable: #f87171;
-    --syntax-operator: #a78bfa;
+    --syntax-operator: #e4e4e7;
 
     /* Diff Colors */
-    --diff-add-bg: rgba(52, 211, 153, 0.15);
-    --diff-add-text: #34d399;
-    --diff-remove-bg: rgba(248, 113, 113, 0.15);
+    --diff-add-bg: rgba(16, 124, 65, 0.2);
+    --diff-add-text: #4ade80;
+    --diff-remove-bg: rgba(239, 68, 68, 0.2);
     --diff-remove-text: #f87171;
-    --diff-change-bg: rgba(251, 191, 36, 0.15);
+    --diff-change-bg: rgba(245, 158, 11, 0.2);
 }
 
 /* Porcelain Light Theme */
@@ -83,21 +83,21 @@
 
     /* Text */
     --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
     --text-inverse: #ffffff;
 
     /* Borders */
     --border-color: #e2e8f0;
     --border-hover: #cbd5e1;
 
-    /* Accent Colors (Rich Drafting Emerald) */
-    --accent-primary: #059669;
-    --accent-hover: #047857;
-    --accent-primary-transparent: rgba(5, 150, 105, 0.1);
+    /* Accent Colors (Solid Zinc-900 / Pure Slate Accent) */
+    --accent-primary: #0f172a;
+    --accent-hover: #000000;
+    --accent-primary-transparent: rgba(15, 23, 42, 0.08);
 
     /* Status Colors */
-    --success: #059669;
+    --success: #107c41;
     --warning: #d97706;
     --danger: #dc2626;
     --danger-hover: #b91c1c;
@@ -107,18 +107,18 @@
     --line-number-color: #94a3b8;
     --line-number-bg: #f8fafc;
     --editor-bg: #ffffff;
-    --selection-bg: rgba(5, 150, 105, 0.2);
+    --selection-bg: rgba(15, 23, 42, 0.1);
     --selection-text: inherit;
     --highlight-bg: rgba(251, 191, 36, 0.3);
 
     /* Preview Specific */
     --preview-bg: #f8fafc;
     --preview-code-bg: #f1f5f9;
-    --preview-blockquote-border: #059669;
-    --preview-blockquote-bg: rgba(5, 150, 105, 0.06);
+    --preview-blockquote-border: #cbd5e1;
+    --preview-blockquote-bg: rgba(15, 23, 42, 0.03);
     --preview-table-border: #e2e8f0;
     --preview-table-header-bg: #f1f5f9;
-    --preview-link-color: #059669;
+    --preview-link-color: #2563eb;
 
     /* Scrollbar */
     --scrollbar-thumb: #cbd5e1;
@@ -126,16 +126,16 @@
 
     /* Syntax Highlighting */
     --syntax-keyword: #db2777;
-    --syntax-string: #059669;
+    --syntax-string: #0284c7;
     --syntax-number: #ea580c;
     --syntax-comment: #94a3b8;
-    --syntax-function: #0284c7;
+    --syntax-function: #7c3aed;
     --syntax-variable: #dc2626;
-    --syntax-operator: #7c3aed;
+    --syntax-operator: #0f172a;
 
     /* Diff Colors */
-    --diff-add-bg: rgba(5, 150, 105, 0.12);
-    --diff-add-text: #059669;
+    --diff-add-bg: rgba(16, 124, 65, 0.12);
+    --diff-add-text: #107c41;
     --diff-remove-bg: rgba(220, 38, 38, 0.12);
     --diff-remove-text: #dc2626;
     --diff-change-bg: rgba(217, 119, 6, 0.12);
