@@ -22,19 +22,23 @@
     --line-height: 1.6;
 
     /* Transitions */
-    --transition-fast: 150ms ease;
-    --transition-normal: 250ms ease;
-    --transition-slow: 350ms ease;
+    --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-normal: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-slow: 360ms cubic-bezier(0.16, 1, 0.3, 1);
 
-    /* Borders */
-    --border-radius-sm: 4px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
+    /* Borders & Pill Geometry */
+    --border-radius-xs: 4px;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    --border-radius-pill: 9999px;
 
     /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.16), 0 4px 8px rgba(0, 0, 0, 0.06);
+    --shadow-glow: 0 0 24px rgba(16, 185, 129, 0.25);
 
     /* Z-index layers */
     --z-base: 1;
@@ -131,22 +135,24 @@ body {
 
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
-    border-radius: 5px;
-    border: 2px solid var(--bg-secondary);
+    border-radius: var(--border-radius-pill);
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-thumb-hover);
+    background-clip: padding-box;
 }
 
 /* Selection */
@@ -172,60 +178,69 @@ body {
     border: 0;
 }
 
-/* Button Base Styles */
+/* Button Base Styles - Modern Pill Geometry */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-sm) var(--spacing-md);
+    gap: 6px;
+    padding: 8px 18px;
     font-family: inherit;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: 500;
     line-height: 1;
     color: var(--text-primary);
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-pill);
     cursor: pointer;
     transition: all var(--transition-fast);
     white-space: nowrap;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn:hover {
     background: var(--bg-hover);
     border-color: var(--border-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
 }
 
 .btn:active {
-    transform: translateY(1px);
+    transform: translateY(0);
 }
 
 .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .btn-primary {
     background: var(--accent-primary);
     border-color: var(--accent-primary);
-    color: white;
+    color: #ffffff;
+    font-weight: 600;
 }
 
 .btn-primary:hover {
     background: var(--accent-hover);
     border-color: var(--accent-hover);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
 }
 
 .btn-danger {
     background: var(--danger);
     border-color: var(--danger);
-    color: white;
+    color: #ffffff;
+    font-weight: 600;
 }
 
 .btn-danger:hover {
     background: var(--danger-hover);
     border-color: var(--danger-hover);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
 }
 
 /* Form Elements */
@@ -237,12 +252,12 @@ select,
 textarea {
     font-family: inherit;
     font-size: var(--font-size-base);
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 8px 14px;
     background: var(--bg-input);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
     color: var(--text-primary);
-    transition: border-color var(--transition-fast);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 input[type="text"]:focus,
@@ -320,13 +335,15 @@ select {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    padding: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
     animation: slideIn 0.3s ease;
     max-width: 400px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .toast.success {
@@ -373,16 +390,22 @@ select {
     animation: slideOut 0.3s ease forwards;
 }
 
-/* Keyboard Shortcuts (kbd) */
+/* Keyboard Shortcuts (kbd) - Sleek Pill Shortcut Badges */
 kbd {
-    display: inline-block;
-    padding: 2px 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
     font-family: var(--font-mono);
-    font-size: var(--font-size-sm);
-    background: var(--bg-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-sm);
-    box-shadow: inset 0 -1px 0 var(--border-color);
+    border-radius: var(--border-radius-pill);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    letter-spacing: 0.02em;
 }
 
 /* Zen Mode */
@@ -633,10 +656,10 @@ body.reduce-motion *::after {
 }
 
 .site-footer {
-    background: var(--bg-secondary, #1a1a2e);
+    background: var(--bg-secondary);
     padding: 2rem 1rem;
     text-align: center;
-    border-top: 1px solid var(--border-color, #333);
+    border-top: 1px solid var(--border-color);
 }
 
 .site-footer > p:first-of-type {
@@ -651,8 +674,9 @@ body.reduce-motion *::after {
 }
 
 .site-footer a {
-    color: var(--accent-color, #7b68ee);
+    color: var(--accent-primary);
     text-decoration: none;
+    font-weight: 500;
 }
 
 .site-footer nav {

@@ -37,12 +37,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     padding: 0;
     background: transparent;
-    border: none;
-    border-radius: var(--border-radius-sm);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-pill);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -50,6 +50,7 @@
 
 .sidebar-close-btn:hover {
     background: var(--bg-hover);
+    border-color: var(--border-color);
     color: var(--text-primary);
 }
 
@@ -183,21 +184,21 @@
     width: 100%;
     max-width: 500px;
     max-height: 90vh;
-    /* dvh avoids mobile address-bar overflow glitch */
     max-height: 90dvh;
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--border-radius-xl);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
-    animation: modalIn 0.2s ease;
+    animation: modalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
 }
 
 @keyframes modalIn {
     from {
         opacity: 0;
-        transform: scale(0.95) translateY(-10px);
+        transform: scale(0.96) translateY(-8px);
     }
 
     to {
@@ -241,8 +242,8 @@
     height: 32px;
     padding: 0;
     background: transparent;
-    border: none;
-    border-radius: var(--border-radius-sm);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-pill);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -250,6 +251,7 @@
 
 .modal-close:hover {
     background: var(--bg-hover);
+    border-color: var(--border-color);
     color: var(--text-primary);
 }
 
@@ -290,20 +292,29 @@
 }
 
 .setting-item input[type="range"] {
-    height: 4px;
+    height: 6px;
     -webkit-appearance: none;
     appearance: none;
     background: var(--bg-tertiary);
-    border-radius: 2px;
+    border-radius: var(--border-radius-pill);
+    outline: none;
 }
 
 .setting-item input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     background: var(--accent-primary);
+    border: 2px solid var(--bg-primary);
     border-radius: 50%;
     cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
 }
 
 .encryption-settings {
@@ -470,16 +481,19 @@
     gap: var(--spacing-sm);
     padding: var(--spacing-lg);
     background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
     color: var(--text-primary);
     cursor: pointer;
     transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
 }
 
 .export-option:hover {
     border-color: var(--accent-primary);
     background: var(--accent-primary-transparent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.18);
 }
 
 .export-option svg {
@@ -516,7 +530,7 @@
     justify-content: center;
     padding: var(--spacing-xl);
     border: 2px dashed var(--border-color);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--border-radius-xl);
     background: var(--bg-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);

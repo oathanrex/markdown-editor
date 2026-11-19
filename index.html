@@ -12,8 +12,8 @@
     <meta name="author" content="oathanrex">
     <meta name="robots" content="index, follow">
     <link rel="apple-touch-icon" href="favicon.svg">
-    <meta name="theme-color" content="#1a1a2e" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#08090d" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
 
     <!-- Security: Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
@@ -136,9 +136,15 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <svg class="app-logo" width="22" height="22" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-                    <rect width="64" height="64" rx="14" fill="#7b68ee"/>
-                    <g fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="app-logo" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                    <defs>
+                        <linearGradient id="logo-emblem-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#10b981"/>
+                            <stop offset="100%" stop-color="#059669"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="64" height="64" rx="16" fill="url(#logo-emblem-grad)"/>
+                    <g fill="none" stroke="#ffffff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M10 44V20l13 14 13-14v24"/>
                         <path d="M48 20v22"/>
                         <path d="M41 35l7 7 7-7"/>
@@ -590,8 +596,8 @@ This isn't just another editor—it's your **private**, distraction-free writing
                     <div class="setting-item">
                         <label for="theme-select">Theme</label>
                         <select id="theme-select">
-                            <option value="dark">Dark (Claude)</option>
-                            <option value="light">Light</option>
+                            <option value="dark">Obsidian Dark</option>
+                            <option value="light">Porcelain Light</option>
                             <option value="high-contrast">High Contrast</option>
                         </select>
                     </div>

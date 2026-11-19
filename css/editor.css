@@ -3,22 +3,22 @@
  * Textarea, line numbers, and editor-specific components
  */
 
-/* Toolbar */
+/* Toolbar - Sleek Frosted Top Bar */
 .toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 8px var(--spacing-md);
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border-color);
     gap: var(--spacing-md);
-    min-height: 48px;
+    min-height: 52px;
     flex-shrink: 0;
-    /* Sticky: even if the app shell ever scrolls (focus-scroll with the
-       on-screen keyboard), the header stays pinned and never disappears */
     position: sticky;
     top: 0;
     z-index: var(--z-sticky);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 .toolbar-left,
@@ -40,13 +40,15 @@
     font-weight: 600;
     color: var(--text-primary);
     white-space: nowrap;
+    letter-spacing: -0.02em;
 }
 
 /* Brand mark next to the app title */
 .app-logo {
     display: block;
     flex-shrink: 0;
-    border-radius: 6px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
 }
 
 .toolbar-btn {
@@ -58,7 +60,7 @@
     padding: 0;
     background: transparent;
     border: 1px solid transparent;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-pill);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -66,13 +68,20 @@
 
 .toolbar-btn:hover {
     background: var(--bg-hover);
+    border-color: var(--border-color);
     color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.toolbar-btn:active {
+    transform: translateY(0);
 }
 
 .toolbar-btn.active {
     background: var(--accent-primary-transparent);
     color: var(--accent-primary);
     border-color: var(--accent-primary);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
 }
 
 .toolbar-btn svg {
@@ -80,42 +89,69 @@
     height: 18px;
 }
 
-/* Button Group */
+/* Button Group - Segmented Pill Control Dock */
 .btn-group {
     display: flex;
-    gap: 2px;
+    align-items: center;
+    gap: 3px;
     background: var(--bg-tertiary);
-    padding: 2px;
-    border-radius: var(--border-radius-sm);
+    padding: 3px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .btn-group .toolbar-btn {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--border-radius-pill);
+    border: 1px solid transparent;
 }
 
-/* Formatting Toolbar */
+.btn-group .toolbar-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    transform: none;
+}
+
+.btn-group .toolbar-btn.active {
+    background: var(--bg-primary);
+    color: var(--accent-primary);
+    border-color: var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Formatting Toolbar - Horizontal Swipable Bar */
 .formatting-toolbar {
     display: flex;
     align-items: center;
-    padding: var(--spacing-xs) var(--spacing-md);
+    padding: 6px var(--spacing-md);
     background: var(--bg-primary);
     border-bottom: 1px solid var(--border-color);
-    gap: var(--spacing-sm);
-    flex-wrap: wrap;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
     flex-shrink: 0;
+}
+
+.formatting-toolbar::-webkit-scrollbar {
+    display: none;
 }
 
 .format-group {
     display: flex;
+    align-items: center;
     gap: 2px;
 }
 
 .format-separator {
     width: 1px;
-    height: 24px;
+    height: 20px;
     background: var(--border-color);
     margin: 0 var(--spacing-xs);
+    flex-shrink: 0;
 }
 
 .format-btn {
@@ -124,7 +160,7 @@
     justify-content: center;
     min-width: 32px;
     height: 32px;
-    padding: 0 var(--spacing-xs);
+    padding: 0 8px;
     background: transparent;
     border: 1px solid transparent;
     border-radius: var(--border-radius-sm);
@@ -132,15 +168,23 @@
     cursor: pointer;
     transition: all var(--transition-fast);
     font-size: var(--font-size-sm);
+    flex-shrink: 0;
 }
 
 .format-btn:hover {
     background: var(--bg-hover);
+    border-color: var(--border-color);
     color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.format-btn:active {
+    transform: translateY(0);
 }
 
 .format-btn.active {
     background: var(--accent-primary-transparent);
+    border-color: var(--accent-primary);
     color: var(--accent-primary);
 }
 
@@ -153,13 +197,15 @@
     flex: 1;
 }
 
-/* Tabs Container */
+/* Tabs Container - Smooth Pill Tabs */
 .tabs-container {
     display: flex;
-    gap: 2px;
+    align-items: center;
+    gap: 6px;
     max-width: 600px;
     overflow-x: auto;
     scrollbar-width: none;
+    padding: 2px 0;
 }
 
 .tabs-container::-webkit-scrollbar {
@@ -169,27 +215,36 @@
 .tab {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
+    gap: 8px;
+    padding: 6px 14px;
     background: var(--bg-tertiary);
-    border: 1px solid transparent;
-    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);
-    max-width: 150px;
+    max-width: 160px;
     min-width: 80px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .tab:hover {
     background: var(--bg-hover);
+    border-color: var(--border-hover);
     color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.tab:active {
+    transform: translateY(0);
 }
 
 .tab.active {
     background: var(--accent-primary-transparent);
     border-color: var(--accent-primary);
     color: var(--accent-primary);
+    font-weight: 600;
+    box-shadow: 0 1px 6px rgba(16, 185, 129, 0.16);
 }
 
 .tab-title {
@@ -204,12 +259,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: 2px;
+    border-radius: var(--border-radius-pill);
     color: var(--text-muted);
     cursor: pointer;
     opacity: 0;
@@ -317,16 +372,19 @@
     color: var(--text-muted);
 }
 
-/* Editor Status Bar */
+/* Editor Status Bar - Frosted Bottom Dock */
 .editor-status-bar {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
-    padding: var(--spacing-xs) var(--spacing-md);
+    padding: 6px var(--spacing-md);
     background: var(--bg-secondary);
     border-top: 1px solid var(--border-color);
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
+    min-height: 34px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .editor-status-bar span {
@@ -335,6 +393,10 @@
 
 #save-status {
     margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
 }
 
 #save-status.saving {
@@ -356,7 +418,6 @@
     cursor: col-resize;
     transition: background var(--transition-fast);
     flex-shrink: 0;
-    /* Prevent page scroll interference while dragging on touch devices */
     touch-action: none;
 }
 
@@ -395,9 +456,10 @@
 
 .find-input {
     flex: 1;
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 6px 14px;
     font-size: var(--font-size-sm);
     min-width: 150px;
+    border-radius: var(--border-radius-pill);
 }
 
 .match-count {
@@ -411,12 +473,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     padding: 0;
     background: transparent;
     border: 1px solid transparent;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--border-radius-pill);
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -424,13 +486,21 @@
 
 .find-btn:hover {
     background: var(--bg-hover);
+    border-color: var(--border-color);
     color: var(--text-primary);
 }
 
 .find-btn.text-btn {
     width: auto;
-    padding: 0 var(--spacing-sm);
+    padding: 4px 14px;
     font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-pill);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+}
+
+.find-btn.text-btn:hover {
+    background: var(--bg-hover);
 }
 
 .find-options {
