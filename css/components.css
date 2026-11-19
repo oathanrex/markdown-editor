@@ -563,6 +563,21 @@
     font-size: var(--font-size-sm);
     color: var(--text-muted);
     margin-top: var(--spacing-xs);
+    text-align: center;
+}
+
+.drop-zone-badge {
+    margin-top: var(--spacing-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill);
 }
 
 /* Emoji Picker */

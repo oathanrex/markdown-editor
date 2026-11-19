@@ -22,6 +22,7 @@ export class Export {
      * Initialize export module
      */
     init() {
+        if (typeof document === 'undefined') return;
         this.setupDropZone();
         this.setupFileInput();
         this.setupExportButtons();
@@ -120,39 +121,52 @@ export class Export {
     }
 
     /**
-     * Import a file
+     * Import a file (Markdown, Text, HTML, Word DOCX, Excel XLSX, CSV, PDF)
      */
     async importFile(file) {
         const extension = file.name.split('.').pop().toLowerCase();
+        const supported = ['md', 'markdown', 'txt', 'html', 'htm', 'docx', 'xlsx', 'xls', 'csv', 'pdf'];
 
-        if (!['md', 'txt', 'html', 'htm'].includes(extension)) {
-            this.showToast('Unsupported file type', 'error');
+        if (!supported.includes(extension)) {
+            this.showToast(`Unsupported file type (.${extension})`, 'error');
             return;
         }
 
         try {
-            const content = await this.readFile(file);
-            let markdown = content;
+            let markdown = '';
+            const baseName = file.name.replace(/\.[^/.]+$/, '');
 
-            // Convert HTML to Markdown if needed
-            if (extension === 'html' || extension === 'htm') {
+            if (['docx', 'xlsx', 'xls', 'pdf'].includes(extension)) {
+                this.showToast(`Converting ${file.name}...`, 'info');
+            }
+
+            if (['md', 'markdown', 'txt'].includes(extension)) {
+                markdown = await this.readFile(file);
+            } else if (extension === 'html' || extension === 'htm') {
+                const content = await this.readFile(file);
                 markdown = this.htmlToMarkdown(content);
+            } else if (extension === 'docx') {
+                markdown = await this.convertDocx(file);
+            } else if (['xlsx', 'xls', 'csv'].includes(extension)) {
+                markdown = await this.convertSpreadsheet(file);
+            } else if (extension === 'pdf') {
+                markdown = await this.convertPdf(file);
             }
 
             // Create new document or set content
             if (this.setContent) {
-                this.setContent(markdown, file.name.replace(/\.[^/.]+$/, ''));
+                await this.setContent(markdown, baseName);
             }
 
-            this.showToast(`Imported ${file.name}`, 'success');
+            this.showToast(`Converted & imported ${file.name}`, 'success');
         } catch (error) {
             console.error('Import error:', error);
-            this.showToast('Failed to import file', 'error');
+            this.showToast(`Failed to import ${file.name}: ${error.message || 'Parser error'}`, 'error');
         }
     }
 
     /**
-     * Read file content
+     * Read file as text
      */
     readFile(file) {
         return new Promise((resolve, reject) => {
@@ -161,6 +175,164 @@ export class Export {
             reader.onerror = reject;
             reader.readAsText(file);
         });
+    }
+
+    /**
+     * Read file as ArrayBuffer
+     */
+    readArrayBuffer(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = reject;
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    /**
+     * Dynamically load external library script safely
+     */
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const existing = document.querySelector(`script[src="${src}"]`);
+            if (existing) {
+                if (existing.dataset.loaded === 'true') {
+                    resolve();
+                } else {
+                    existing.addEventListener('load', () => resolve());
+                    existing.addEventListener('error', (e) => reject(e));
+                }
+                return;
+            }
+
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            script.crossOrigin = 'anonymous';
+            script.onload = () => {
+                script.dataset.loaded = 'true';
+                resolve();
+            };
+            script.onerror = () => reject(new Error(`Failed to load parser library (${src})`));
+            document.head.appendChild(script);
+        });
+    }
+
+    /**
+     * Convert Word (.docx) document to Markdown via Mammoth.js
+     */
+    async convertDocx(file) {
+        if (!window.mammoth) {
+            await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+        }
+        if (!window.mammoth) {
+            throw new Error('Mammoth.js failed to initialize');
+        }
+
+        const arrayBuffer = await this.readArrayBuffer(file);
+        const result = await window.mammoth.convertToMarkdown({ arrayBuffer });
+        return (result.value || '').trim() || `*Empty Word document: ${file.name}*`;
+    }
+
+    /**
+     * Convert Excel / CSV (.xlsx, .xls, .csv) spreadsheet to Markdown tables via SheetJS
+     */
+    async convertSpreadsheet(file) {
+        if (!window.XLSX) {
+            await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.mini.min.js');
+        }
+        if (!window.XLSX) {
+            throw new Error('SheetJS (XLSX) failed to initialize');
+        }
+
+        const arrayBuffer = await this.readArrayBuffer(file);
+        const workbook = window.XLSX.read(arrayBuffer, { type: 'array' });
+        const markdownParts = [];
+
+        for (const sheetName of workbook.SheetNames) {
+            const sheet = workbook.Sheets[sheetName];
+            const rows = window.XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
+            if (!rows || rows.length === 0) continue;
+
+            const validRows = rows.filter(r => Array.isArray(r) && r.some(cell => String(cell).trim() !== ''));
+            if (validRows.length === 0) continue;
+
+            if (workbook.SheetNames.length > 1) {
+                markdownParts.push(`### Sheet: ${sheetName}\n`);
+            }
+
+            const colCount = Math.max(...validRows.map(r => r.length));
+            if (colCount === 0) continue;
+
+            const cleanCell = (c) => String(c ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>').trim();
+
+            const headerRow = validRows[0];
+            const headerCells = [];
+            const sepCells = [];
+            for (let c = 0; c < colCount; c++) {
+                const val = cleanCell(headerRow[c]) || `Column ${c + 1}`;
+                headerCells.push(val);
+                sepCells.push(':---');
+            }
+
+            markdownParts.push(`| ${headerCells.join(' | ')} |`);
+            markdownParts.push(`| ${sepCells.join(' | ')} |`);
+
+            for (let r = 1; r < validRows.length; r++) {
+                const row = validRows[r];
+                const cells = [];
+                for (let c = 0; c < colCount; c++) {
+                    cells.push(cleanCell(row[c]));
+                }
+                markdownParts.push(`| ${cells.join(' | ')} |`);
+            }
+            markdownParts.push('\n');
+        }
+
+        return markdownParts.join('\n').trim() || `*Empty spreadsheet: ${file.name}*`;
+    }
+
+    /**
+     * Convert PDF (.pdf) document to Markdown text via Mozilla PDF.js
+     */
+    async convertPdf(file) {
+        if (!window.pdfjsLib) {
+            await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+        }
+        if (!window.pdfjsLib) {
+            throw new Error('PDF.js failed to initialize');
+        }
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const arrayBuffer = await this.readArrayBuffer(file);
+        const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const pagesMarkdown = [];
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const textContent = await page.getTextContent();
+
+            // Group text items by Y-coordinate
+            const linesMap = new Map();
+            for (const item of textContent.items) {
+                if (!item.str || !item.str.trim()) continue;
+                const y = Math.round(item.transform[5]);
+                if (!linesMap.has(y)) {
+                    linesMap.set(y, []);
+                }
+                linesMap.get(y).push(item.str);
+            }
+
+            const sortedYs = Array.from(linesMap.keys()).sort((a, b) => b - a);
+            const pageLines = sortedYs.map(y => linesMap.get(y).join(' ').trim()).filter(Boolean);
+
+            if (pageLines.length > 0) {
+                const pageHeader = pdf.numPages > 1 ? `<!-- Page ${pageNum} of ${pdf.numPages} -->\n\n` : '';
+                pagesMarkdown.push(pageHeader + pageLines.join('\n\n'));
+            }
+        }
+
+        return pagesMarkdown.join('\n\n---\n\n').trim() || `*No readable text extracted from PDF: ${file.name}*`;
     }
 
     /**

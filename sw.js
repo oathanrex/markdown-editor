@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'md-editor-v6';
+const CACHE_NAME = 'md-editor-v7';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -41,7 +41,11 @@ const CDN_ASSETS = [
     'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js'
+    'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.mini.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
 ];
 
 // Install event - cache assets
