@@ -823,13 +823,18 @@ export class App {
      * with no scrollbar to come back. Snap the shell back instantly.
      */
     setupScrollGuard() {
-        const reset = (e) => {
-            const target = e.target;
-            if ((target === document.body || target === document.documentElement) && target.scrollTop !== 0) {
-                target.scrollTop = 0;
+        const reset = () => {
+            if (window.scrollY !== 0 || window.scrollX !== 0) {
+                window.scrollTo(0, 0);
+            }
+            if (document.documentElement && document.documentElement.scrollTop !== 0) {
+                document.documentElement.scrollTop = 0;
+            }
+            if (document.body && document.body.scrollTop !== 0) {
+                document.body.scrollTop = 0;
             }
         };
-        // Capture phase: catches non-bubbling scroll events on body/html
+        window.addEventListener('scroll', reset, { passive: true });
         document.addEventListener('scroll', reset, true);
     }
 
@@ -942,35 +947,39 @@ export class App {
      * Handle TOC navigation
      */
     handleTOCNavigate(id) {
-        // Scroll preview to heading
-        this.modules.preview.scrollToHeading(id);
+        try {
+            // Scroll preview to heading safely
+            this.modules.preview.scrollToHeading(id);
 
-        // Find heading in editor and scroll there too
-        const content = this.modules.editor.getContent();
-        const lines = content.split('\n');
-        let lineNumber = 0;
-        const slugCounts = new Map();
+            // Find heading in editor and scroll there too
+            const content = this.modules.editor.getContent();
+            const lines = content.split('\n');
+            let lineNumber = 0;
+            const slugCounts = new Map();
 
-        for (let i = 0; i < lines.length; i++) {
-            const match = lines[i].match(/^#{1,6}\s+(.+)$/);
-            if (match) {
-                // Replicate GitHub-style duplicate slugs (id, id-1, ...) so
-                // TOC navigation works for repeated heading titles
-                const base = match[1].trim().toLowerCase()
-                    .replace(/[^\w\s-]/g, '')
-                    .replace(/\s/g, '-') || 'section';
-                const count = slugCounts.get(base) || 0;
-                slugCounts.set(base, count + 1);
-                const headingId = count === 0 ? base : `${base}-${count}`;
-                if (headingId === id) {
-                    lineNumber = i + 1;
-                    break;
+            for (let i = 0; i < lines.length; i++) {
+                const match = lines[i].match(/^#{1,6}\s+(.+)$/);
+                if (match) {
+                    // Replicate GitHub-style duplicate slugs (id, id-1, ...) so
+                    // TOC navigation works for repeated heading titles
+                    const base = match[1].trim().toLowerCase()
+                        .replace(/[^\w\s-]/g, '')
+                        .replace(/\s/g, '-') || 'section';
+                    const count = slugCounts.get(base) || 0;
+                    slugCounts.set(base, count + 1);
+                    const headingId = count === 0 ? base : `${base}-${count}`;
+                    if (headingId === id) {
+                        lineNumber = i + 1;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (lineNumber > 0) {
-            this.modules.editor.scrollToLine(lineNumber);
+            if (lineNumber > 0) {
+                this.modules.editor.scrollToLine(lineNumber);
+            }
+        } catch (err) {
+            console.warn('TOC navigation error caught safely:', err);
         }
     }
 

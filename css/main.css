@@ -657,6 +657,7 @@ body.reduce-motion *::after {
 }
 
 .site-footer {
+    display: none;
     background: var(--bg-secondary);
     padding: 2rem 1rem;
     text-align: center;

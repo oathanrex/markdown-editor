@@ -301,7 +301,17 @@ export class Preview {
      * Scroll to heading by ID
      */
     scrollToHeading(id) {
-        const heading = this.container.querySelector(`#${id}`);
+        if (!id || !this.container) return;
+        // Escape ID or use getElementById to prevent DOMException on numeric IDs (e.g. #1-installation, #2-step)
+        let heading = null;
+        try {
+            heading = document.getElementById(id);
+            if (!heading && window.CSS && CSS.escape) {
+                heading = this.container.querySelector(`[id="${CSS.escape(id)}"]`);
+            }
+        } catch (e) {
+            console.warn('Could not locate heading by id:', id, e);
+        }
         if (heading) {
             heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
