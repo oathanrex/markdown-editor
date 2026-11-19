@@ -599,10 +599,16 @@ export class Parser {
             `<span class="math-inline" data-math="${this.escapeHtml(math)}">${this.escapeHtml(math)}</span>`));
 
         // Images (before links to prevent conflict)
-        text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => stash(`<img src="${src}" alt="${alt}">`));
+        text = text.replace(/!\[([^\]]*)\]\(([^)]*)\)/g, (match, alt, src) => stash(`<img src="${src}" alt="${alt}">`));
 
-        // Links
-        text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, href) => stash(`<a href="${href}" target="_blank" rel="noopener">${label}</a>`));
+        // Links (supports empty destination e.g. [label]() per CommonMark/GFM)
+        text = text.replace(/\[([^\]]+)\]\(([^)]*)\)/g, (match, label, href) => {
+            const trimmedHref = href.trim();
+            if (!trimmedHref) {
+                return stash(`<a href="">${label}</a>`);
+            }
+            return stash(`<a href="${trimmedHref}" target="_blank" rel="noopener">${label}</a>`);
+        });
 
         // Explicit autolinks <https://...> and <user@example.com>
         text = text.replace(/&lt;(https?:\/\/[^&]+)&gt;/g, (match, url) => stash(`<a href="${url}" target="_blank" rel="noopener">${url}</a>`));
