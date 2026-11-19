@@ -124,3 +124,29 @@ test('Explicit links and images keep working alongside bare autolinks', () => {
     assert.match(html, /<a href="https:\/\/github\.com"[^>]*>GitHub<\/a>/);
     assert.match(html, /<img src="https:\/\/img\.example\/x\.png" alt="alt">/);
 });
+
+test('GitHub README Parity - Aligned containers, badges in links, and table column alignments', () => {
+    const parser = new Parser();
+
+    // 1. Raw HTML block alignment (e.g. <div align="center">)
+    const heroMd = '<div align="center">\n\n# Project Title\n\n</div>';
+    const heroHtml = parser.parse(heroMd);
+    assert.match(heroHtml, /<div align="center">/i);
+    assert.match(heroHtml, /<\/div>/i);
+    assert.match(heroHtml, /Project Title<\/h1>/i);
+    assert.doesNotMatch(heroHtml, /&lt;div align="center"&gt;/i);
+
+    // 2. Linked badges (no numeric corruption like "0</a>")
+    const badgeMd = '[![CI Badge](https://img.shields.io/badge/build-pass-green.svg)](https://github.com/org/repo)';
+    const badgeHtml = parser.parse(badgeMd);
+    assert.match(badgeHtml, /<a href="https:\/\/github\.com\/org\/repo"[^>]*><img src="https:\/\/img\.shields\.io\/badge\/build-pass-green\.svg" alt="CI Badge"><\/a>/);
+    assert.doesNotMatch(badgeHtml, />\s*\d+\s*<\/a>/);
+
+    // 3. Table header & data cell alignment
+    const tableMd = '| Feature | Weight | Status |\n| :--- | :---: | ---: |\n| Tests | 20% | Passed |';
+    const tableHtml = parser.parse(tableMd);
+    assert.match(tableHtml, /<th align="center"[^>]*>Weight<\/th>/);
+    assert.match(tableHtml, /<td align="center"[^>]*>20%<\/td>/);
+    assert.match(tableHtml, /<th align="right"[^>]*>Status<\/th>/);
+    assert.match(tableHtml, /<td align="right"[^>]*>Passed<\/td>/);
+});

@@ -326,6 +326,48 @@
     box-shadow: var(--shadow-sm);
 }
 
+/* Badges & inline icon images (GitHub-style: no shadows, inline display) */
+.markdown-body a img,
+.markdown-body img[src*="shields.io"],
+.markdown-body img[src*="badge"],
+.markdown-body img[src*=".svg"] {
+    box-shadow: none;
+    border-radius: 0;
+    vertical-align: middle;
+    display: inline-block;
+    margin: 2px 2px;
+}
+
+/* Aligned container & header support (e.g. <div align="center">) */
+.markdown-body [align="center"],
+.markdown-body div[align="center"],
+.markdown-body p[align="center"],
+.markdown-body th[align="center"],
+.markdown-body td[align="center"] {
+    text-align: center;
+}
+
+.markdown-body [align="right"],
+.markdown-body div[align="right"],
+.markdown-body p[align="right"],
+.markdown-body th[align="right"],
+.markdown-body td[align="right"] {
+    text-align: right;
+}
+
+.markdown-body [align="left"],
+.markdown-body div[align="left"],
+.markdown-body p[align="left"],
+.markdown-body th[align="left"],
+.markdown-body td[align="left"] {
+    text-align: left;
+}
+
+.markdown-body [align="center"] > * {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* Keyboard - Sleek Pill Shortcut Badges */
 .markdown-body kbd {
     display: inline-flex;

@@ -477,6 +477,22 @@ export class Parser {
                 continue;
             }
 
+            // Handle raw HTML blocks (CommonMark / GFM): <div align="center">, </div>, <p align="...">, </p>, <center>, etc.
+            const htmlBlockMatch = line.match(/^\s*(<\/?(?:div|p|center|span|section|header|footer|article|aside|nav|figure|figcaption|table|thead|tbody|tfoot|tr|th|td|blockquote|dl|dt|dd|kbd|sub|sup|picture|source|video|audio|b|i|u|s|em|strong|a|img|h[1-6])(?:[\s>][^<>]*)?>)\s*$/i);
+            if (htmlBlockMatch) {
+                // Flush pending
+                html += this.flushBlockquote(inBlockquote, blockquoteContent);
+                inBlockquote = false;
+                blockquoteContent = '';
+                html += this.flushList(inList, listItems, listType);
+                inList = false;
+                listItems = [];
+
+                html += htmlBlockMatch[1] + '\n';
+                i++;
+                continue;
+            }
+
             // Handle empty lines
             if (line.trim() === '') {
                 i++;
@@ -542,7 +558,8 @@ export class Parser {
             this.patterns.table.test(line) ||
             this.patterns.taskList.test(line) ||
             this.patterns.detailsOpen.test(line) ||
-            this.patterns.detailsClose.test(line);
+            this.patterns.detailsClose.test(line) ||
+            /^\s*<\/?(?:div|p|center|span|section|header|footer|article|aside|nav|figure|figcaption|table|thead|tbody|tfoot|tr|th|td|blockquote|dl|dt|dd|kbd|sub|sup|picture|source|video|audio)(?:[\s>][^<>]*)?>\s*$/i.test(line);
     }
 
     /**
@@ -558,9 +575,6 @@ export class Parser {
     parseInline(text) {
         if (!text) return '';
 
-        // Escape HTML first
-        text = this.escapeHtml(text);
-
         // Stash generated HTML behind placeholders so later passes
         // (formatting, autolinks, emoji) cannot corrupt it
         const fragments = [];
@@ -568,6 +582,12 @@ export class Parser {
             fragments.push(html);
             return `\x00${(fragments.length - 1).toString(36)}\x00`;
         };
+
+        // Preserve safe inline HTML elements (CommonMark inline HTML: <kbd>, <sub>, <sup>, <br>, <span>, etc.)
+        text = text.replace(/<\/?(?:b|i|u|s|em|strong|a|img|code|kbd|sub|sup|br|span|mark|small|del|ins)(?:\s+[^<>]*)?>/gi, match => stash(match));
+
+        // Escape remaining HTML (<, >, &, etc. like <600 words) or <PATH_TO_REPO>)
+        text = this.escapeHtml(text);
 
         // Inline code FIRST (GFM: nothing inside code spans gets formatted)
         text = text.replace(/`([^`]+)`/g, (match, code) => stash(`<code>${code}</code>`));
@@ -635,8 +655,11 @@ export class Parser {
         // Line breaks (two spaces at end of line)
         text = text.replace(/  $/gm, '<br>');
 
-        // Restore stashed fragments
-        text = text.replace(/\x00([0-9a-z]+)\x00/g, (match, index) => fragments[parseInt(index, 36)] || match);
+        // Restore stashed fragments recursively (handles nested stashes, e.g. [![badge](img)](link))
+        let maxPasses = 10;
+        while (/\x00[0-9a-z]+\x00/.test(text) && maxPasses-- > 0) {
+            text = text.replace(/\x00([0-9a-z]+)\x00/g, (match, index) => fragments[parseInt(index, 36)] || match);
+        }
 
         return text;
     }
@@ -703,23 +726,28 @@ export class Parser {
         const lineAttr = line !== undefined ? ` data-source-line="${line}"` : '';
         let html = `<table${lineAttr}>`;
         let isHeader = true;
-        let alignments = [];
         let inThead = false;
         let inTbody = false;
+
+        // Pre-parse alignments from separator row so <th> headers also receive alignment
+        let alignments = [];
+        const sepIndex = rows.findIndex(r => this.patterns.tableSeparator.test(r));
+        if (sepIndex !== -1) {
+            const sepCells = rows[sepIndex].slice(1, -1).split('|');
+            alignments = sepCells.map(cell => {
+                cell = cell.trim();
+                if (cell.startsWith(':') && cell.endsWith(':')) return 'center';
+                if (cell.endsWith(':')) return 'right';
+                if (cell.startsWith(':')) return 'left';
+                return '';
+            });
+        }
 
         for (let i = 0; i < rows.length; i++) {
             const row = rows[i];
 
-            // Check if this is the separator row
+            // Skip the separator row
             if (this.patterns.tableSeparator.test(row)) {
-                // Parse alignments
-                const cells = row.slice(1, -1).split('|');
-                alignments = cells.map(cell => {
-                    cell = cell.trim();
-                    if (cell.startsWith(':') && cell.endsWith(':')) return 'center';
-                    if (cell.endsWith(':')) return 'right';
-                    return 'left';
-                });
                 isHeader = false;
                 continue;
             }
@@ -743,8 +771,9 @@ export class Parser {
 
             html += '<tr>';
             cells.forEach((cell, j) => {
-                const align = alignments[j] ? ` style="text-align: ${alignments[j]}"` : '';
-                html += `<${tag}${align}>${this.parseInline(cell)}</${tag}>`;
+                const alignStyle = alignments[j] ? ` style="text-align: ${alignments[j]}"` : '';
+                const alignAttr = alignments[j] ? ` align="${alignments[j]}"` : '';
+                html += `<${tag}${alignAttr}${alignStyle}>${this.parseInline(cell)}</${tag}>`;
             });
             html += '</tr>';
         }
@@ -920,7 +949,7 @@ export class Parser {
         if (typeof DOMPurify !== 'undefined') {
             return DOMPurify.sanitize(html, {
                 ADD_TAGS: ['mermaid', 'math-inline', 'math-block'],
-                ADD_ATTR: ['data-math', 'data-mermaid', 'target', 'rel', 'class', 'id', 'data-source-line'],
+                ADD_ATTR: ['data-math', 'data-mermaid', 'target', 'rel', 'class', 'id', 'data-source-line', 'align'],
                 ALLOW_DATA_ATTR: true,
                 FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form'],
                 FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmouseenter', 'onmouseleave']

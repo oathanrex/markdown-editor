@@ -3,7 +3,7 @@
  * Enables offline functionality and caching
  */
 
-const CACHE_NAME = 'md-editor-v8';
+const CACHE_NAME = 'md-editor-v9';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -37,6 +37,7 @@ const ASSETS_TO_CACHE = [
 // External CDN resources to cache
 const CDN_ASSETS = [
     'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css',
     'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css',
