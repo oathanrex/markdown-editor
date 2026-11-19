@@ -3,6 +3,112 @@
  * Multi-document tab management
  */
 
+export const DEFAULT_STARTER_GUIDE = `# ⚡ AI Markdown Studio & Universal Document Bridge
+> **Paste raw outputs from Claude, ChatGPT, or DeepSeek to instantly format, visualize architecture diagrams, and export executive-ready PDFs, Word docs, and clean GitHub Markdown.**
+
+---
+
+### 🎯 Why Developers & Writers Use This Space
+
+Every day, you copy complex Markdown from AI assistants—PRDs, API specs, schemas, and reports. But raw Markdown full of backticks and asterisks isn't presentable to clients, executives, or teammates.
+
+**This studio bridges that gap with 4 core superpowers:**
+
+| Capability | What It Does For You | Action / Shortcut |
+| :--- | :--- | :--- |
+| **🤖 AI Output Formatter** | Paste raw Claude / ChatGPT markdown -> Instant executive formatting | \`Ctrl + V\` anywhere |
+| **📊 Architecture Diagrams** | Live Mermaid.js rendering for system flows, sequence diagrams, and ERDs | \` \`\`\`mermaid \` blocks |
+| **📥 Drag & Drop Ingestion** | Drop any \`.docx\`, \`.pdf\`, \`.xlsx\`, or \`.csv\` directly into clean Markdown | Drag files into editor |
+| **📤 1-Click Multi-Export** | Export print-styled PDF, Word \`.docx\`, raw \`.html\`, or clean \`.md\` | Click **Export** in toolbar |
+| **🔒 Enterprise Zero-Leak** | 100% Client-Side. No server uploads. Proprietary code & NDAs stay in RAM | IndexedDB + AES-256 |
+
+---
+
+### 🛠️ Interactive Feature Playground (Live Preview)
+
+#### 1. System Architecture & Flowcharts (Mermaid.js)
+Visualize your AI-generated architecture diagrams instantly:
+
+\`\`\`mermaid
+flowchart LR
+    A[🤖 AI Assistant\\nClaude / ChatGPT] -->|Raw Markdown| B(⚡ Markdown Editor Studio)
+    B -->|Client-Side Parse| C{Format & Enhance}
+    C -->|Visual Diagrams| D[Mermaid / KaTeX]
+    C -->|Tables & Alerts| E[GFM Clean Tables]
+    C -->|Instant Export| F[📄 PDF / 📝 Word / 🌐 HTML]
+\`\`\`
+
+#### 2. GitHub-Grade Callouts & Alerts
+Highlight critical implementation details or warnings:
+
+> [!TIP]
+> **Pro Tip for Developers:** Paste your AI prompt responses directly into this editor. Press **F11** for Zen Mode to focus purely on refining your document.
+
+> [!IMPORTANT]
+> **Privacy Guarantee:** Unlike online file converters that store your uploads on cloud servers, this editor parses everything locally in your browser via WebAssembly and JavaScript engines.
+
+> [!WARNING]
+> Always verify database migration commands and API keys before executing them in production.
+
+#### 3. Mathematical & Algorithmic Proofs (KaTeX)
+Render complex formulas and data science notations:
+
+The standard Gaussian distribution probability density function:
+$$ f(x) = \\frac{1}{\\sigma \\sqrt{2\\pi}} e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2} $$
+
+Time complexity: $O(N \\log N)$ with space bound $S(N) \\le O(K)$.
+
+#### 4. Live Technical Data Matrix
+Clean, responsive tables with automatic column alignment:
+
+| Component | Technology | Target Latency | Client-Side Security |
+| :--- | :---: | :---: | :--- |
+| **Markdown Parser** | Custom GFM Engine | \`< 2ms\` | Zero network transmission |
+| **Office Ingestion** | Mammoth.js + SheetJS | \`< 50ms\` | Local ArrayBuffer memory |
+| **PDF Extraction** | Mozilla PDF.js | \`< 120ms\` | Isolated Web Worker |
+| **Document Storage** | IndexedDB + AES-256 | Instant | Local browser sandbox |
+
+#### 5. Code Blocks with Filenames & 1-Click Copy
+Syntax-highlighted code snippets ready for documentation:
+
+\`\`\`python title="audit_pipeline.py"
+import asyncio
+from dataclasses import dataclass
+
+@dataclass
+class AuditResult:
+    score: float
+    passed: bool
+    remediation_plan: list[str]
+
+async def run_document_audit(markdown_content: str) -> AuditResult:
+    """Analyze AI markdown output for structure, headings, and completeness."""
+    lines = markdown_content.splitlines()
+    has_headings = any(line.startswith('#') for line in lines)
+    return AuditResult(score=98.5, passed=has_headings, remediation_plan=["Ready for PDF export"])
+\`\`\`
+
+#### 6. Actionable Task Management
+Track your workflow milestones:
+- [x] Copy raw research and implementation spec from Claude / ChatGPT
+- [x] Review Mermaid architecture diagrams and KaTeX formulas
+- [ ] Drag & drop supporting Excel data sheet (\`.xlsx\`) to auto-generate comparison table
+- [ ] Click **Export** -> **Export as PDF** for executive presentation
+
+---
+
+### ⌨️ Power-User Keyboard Shortcuts
+
+- \`Ctrl + B\` : **Bold**
+- \`Ctrl + I\` : *Italics*
+- \`Ctrl + K\` : Insert Link
+- \`Ctrl + F\` : Find & Replace Panel
+- \`Ctrl + S\` : Force Instant Save
+- \`F11\` : Fullscreen Zen Mode (Distraction-Free)
+
+*👉 **Ready to begin?** Select all (\`Ctrl + A\`), press \`Backspace\`, and paste your AI output or drag your first file to start!*
+`;
+
 /**
  * Tab Manager
  */
@@ -407,8 +513,11 @@ export class Tabs {
         const documents = await this.storage.getAllDocuments();
 
         if (documents.length === 0) {
-            // Create default tab
-            await this.createTab();
+            // Create default tab with rich AI workflow starter guide
+            await this.createTab({
+                title: 'Welcome & AI Cheatsheet',
+                content: DEFAULT_STARTER_GUIDE
+            });
         } else {
             // Load existing documents
             for (const doc of documents) {
