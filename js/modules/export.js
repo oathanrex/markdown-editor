@@ -147,6 +147,8 @@ export class Export {
                 markdown = this.htmlToMarkdown(content);
             } else if (extension === 'docx') {
                 markdown = await this.convertDocx(file);
+            } else if (extension === 'doc') {
+                throw new Error('Legacy binary .doc format is not supported. Please save or convert your file to modern .docx format.');
             } else if (['xlsx', 'xls', 'csv'].includes(extension)) {
                 markdown = await this.convertSpreadsheet(file);
             } else if (extension === 'pdf') {
@@ -239,14 +241,14 @@ export class Export {
      */
     async convertSpreadsheet(file) {
         if (!window.XLSX) {
-            await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.mini.min.js');
+            await this.loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
         }
         if (!window.XLSX) {
             throw new Error('SheetJS (XLSX) failed to initialize');
         }
 
         const arrayBuffer = await this.readArrayBuffer(file);
-        const workbook = window.XLSX.read(arrayBuffer, { type: 'array' });
+        const workbook = window.XLSX.read(arrayBuffer, { type: 'array', codepage: 65001 });
         const markdownParts = [];
 
         for (const sheetName of workbook.SheetNames) {
@@ -312,19 +314,25 @@ export class Export {
             const page = await pdf.getPage(pageNum);
             const textContent = await page.getTextContent();
 
-            // Group text items by Y-coordinate
+            // Group text items by Y-coordinate with baseline tolerance
             const linesMap = new Map();
             for (const item of textContent.items) {
                 if (!item.str || !item.str.trim()) continue;
-                const y = Math.round(item.transform[5]);
+                const rawY = item.transform ? item.transform[5] : 0;
+                const rawX = item.transform ? item.transform[4] : 0;
+                const y = Math.round(rawY / 3) * 3;
                 if (!linesMap.has(y)) {
                     linesMap.set(y, []);
                 }
-                linesMap.get(y).push(item.str);
+                linesMap.get(y).push({ x: rawX, text: item.str });
             }
 
             const sortedYs = Array.from(linesMap.keys()).sort((a, b) => b - a);
-            const pageLines = sortedYs.map(y => linesMap.get(y).join(' ').trim()).filter(Boolean);
+            const pageLines = sortedYs.map(y => {
+                const items = linesMap.get(y);
+                items.sort((a, b) => a.x - b.x);
+                return items.map(i => i.text).join(' ').trim();
+            }).filter(Boolean);
 
             if (pageLines.length > 0) {
                 const pageHeader = pdf.numPages > 1 ? `<!-- Page ${pageNum} of ${pdf.numPages} -->\n\n` : '';
