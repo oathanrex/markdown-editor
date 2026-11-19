@@ -317,6 +317,17 @@ export class Parser {
                 continue;
             }
 
+            // Handle HTML comments outside code blocks: <!-- ... --> (single-line or multi-line)
+            if (/^\s*<!--/.test(line)) {
+                let commentLine = line;
+                while (i < lines.length && !commentLine.includes('-->')) {
+                    i++;
+                    if (i < lines.length) commentLine = lines[i];
+                }
+                i++;
+                continue;
+            }
+
             // Handle tables
             if (this.patterns.table.test(line)) {
                 html += this.flushBlockquote(inBlockquote, blockquoteContent);
@@ -477,8 +488,65 @@ export class Parser {
                 continue;
             }
 
-            // Handle raw HTML blocks (CommonMark / GFM): <div align="center">, </div>, <p align="...">, </p>, <center>, etc.
-            const htmlBlockMatch = line.match(/^\s*(<\/?(?:div|p|center|span|section|header|footer|article|aside|nav|figure|figcaption|table|thead|tbody|tfoot|tr|th|td|blockquote|dl|dt|dd|kbd|sub|sup|picture|source|video|audio|b|i|u|s|em|strong|a|img|h[1-6])(?:[\s>][^<>]*)?>)\s*$/i);
+            // Standalone break tags: <br>, <br/>, <br/><br/>, etc.
+            if (/^\s*(?:<br\s*\/?>\s*)+$/i.test(line)) {
+                html += this.flushBlockquote(inBlockquote, blockquoteContent);
+                inBlockquote = false;
+                blockquoteContent = '';
+                html += this.flushList(inList, listItems, listType);
+                inList = false;
+                listItems = [];
+
+                html += line.trim() + '\n';
+                i++;
+                continue;
+            }
+
+            // Handle explicit <p ...> blocks (multiline HTML paragraphs with attributes like <p align="center">)
+            const pBlockMatch = line.match(/^\s*<p(\s+[^>]*)?>([\s\S]*)$/i);
+            if (pBlockMatch) {
+                html += this.flushBlockquote(inBlockquote, blockquoteContent);
+                inBlockquote = false;
+                blockquoteContent = '';
+                html += this.flushList(inList, listItems, listType);
+                inList = false;
+                listItems = [];
+
+                const pAttrs = pBlockMatch[1] || '';
+                const firstContent = pBlockMatch[2];
+                const closeIdx = firstContent.indexOf('</p>');
+                if (closeIdx !== -1) {
+                    const innerText = firstContent.slice(0, closeIdx).trim();
+                    html += `<p${pAttrs}>${this.parseInline(innerText)}</p>\n`;
+                    i++;
+                    continue;
+                }
+
+                // Collect lines until closing </p>
+                const pLines = [firstContent];
+                let closed = false;
+                let j = i + 1;
+                while (j < lines.length) {
+                    const endMatch = lines[j].match(/^([\s\S]*?)<\/p>\s*$/i);
+                    if (endMatch) {
+                        closed = true;
+                        pLines.push(endMatch[1]);
+                        break;
+                    }
+                    pLines.push(lines[j]);
+                    j++;
+                }
+
+                if (closed) {
+                    const innerText = pLines.filter(l => l && l.trim()).join(' ');
+                    html += `<p${pAttrs}>${this.parseInline(innerText)}</p>\n`;
+                    i = j + 1;
+                    continue;
+                }
+            }
+
+            // Handle raw HTML blocks (CommonMark / GFM): <div align="center">, </div>, </p>, <center>, etc.
+            const htmlBlockMatch = line.match(/^\s*(<\/?(?:div|p|center|span|section|header|footer|article|aside|nav|figure|figcaption|table|thead|tbody|tfoot|tr|th|td|blockquote|dl|dt|dd|kbd|sub|sup|picture|source|video|audio|b|i|u|s|em|strong|a|img|hr|h[1-6])(?:[\s>][^<>]*)?>)\s*$/i);
             if (htmlBlockMatch) {
                 // Flush pending
                 html += this.flushBlockquote(inBlockquote, blockquoteContent);
@@ -559,6 +627,8 @@ export class Parser {
             this.patterns.taskList.test(line) ||
             this.patterns.detailsOpen.test(line) ||
             this.patterns.detailsClose.test(line) ||
+            /^\s*<!--/.test(line) ||
+            /^\s*(?:<br\s*\/?>\s*)+$/i.test(line) ||
             /^\s*<\/?(?:div|p|center|span|section|header|footer|article|aside|nav|figure|figcaption|table|thead|tbody|tfoot|tr|th|td|blockquote|dl|dt|dd|kbd|sub|sup|picture|source|video|audio)(?:[\s>][^<>]*)?>\s*$/i.test(line);
     }
 
@@ -583,8 +653,14 @@ export class Parser {
             return `\x00${(fragments.length - 1).toString(36)}\x00`;
         };
 
-        // Preserve safe inline HTML elements (CommonMark inline HTML: <kbd>, <sub>, <sup>, <br>, <span>, etc.)
-        text = text.replace(/<\/?(?:b|i|u|s|em|strong|a|img|code|kbd|sub|sup|br|span|mark|small|del|ins)(?:\s+[^<>]*)?>/gi, match => stash(match));
+        // Strip inline HTML comments (GFM / CommonMark)
+        text = text.replace(/<!--[\s\S]*?-->/g, '');
+
+        // Preserve valid HTML entities (&nbsp;, &#8287;, &#x20;, &amp;, &copy;, etc.) so they are not double-escaped
+        text = text.replace(/&(?:[a-zA-Z0-9]+|#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6});/g, match => stash(match));
+
+        // Preserve safe inline HTML elements (CommonMark inline HTML: <kbd>, <sub>, <sup>, <br>, <hr>, <span>, etc.)
+        text = text.replace(/<\/?(?:b|i|u|s|em|strong|a|img|code|kbd|sub|sup|br|hr|span|mark|small|del|ins)(?:\s+[^<>]*)?\s*\/?>/gi, match => stash(match));
 
         // Escape remaining HTML (<, >, &, etc. like <600 words) or <PATH_TO_REPO>)
         text = this.escapeHtml(text);
@@ -939,13 +1015,14 @@ export class Parser {
      */
     escapeHtml(text) {
         const map = {
-            '&': '&amp;',
             '<': '&lt;',
             '>': '&gt;',
             '"': '&quot;',
             "'": '&#39;'
         };
-        return text.replace(/[&<>"']/g, char => map[char]);
+        return text
+            .replace(/&(?!(?:[a-zA-Z0-9]+|#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6});)/g, '&amp;')
+            .replace(/[<>"']/g, char => map[char]);
     }
 
     /**
@@ -955,7 +1032,7 @@ export class Parser {
         if (typeof DOMPurify !== 'undefined') {
             return DOMPurify.sanitize(html, {
                 ADD_TAGS: ['mermaid', 'math-inline', 'math-block'],
-                ADD_ATTR: ['data-math', 'data-mermaid', 'target', 'rel', 'class', 'id', 'data-source-line', 'align'],
+                ADD_ATTR: ['data-math', 'data-mermaid', 'target', 'rel', 'class', 'id', 'data-source-line', 'align', 'width', 'height'],
                 ALLOW_DATA_ATTR: true,
                 FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form'],
                 FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'onmouseout', 'onmouseenter', 'onmouseleave']
@@ -974,7 +1051,7 @@ export class Parser {
             .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
             .replace(/<object[\s\S]*?<\/object>/gi, '')
             .replace(/<embed[\s\S]*?>/gi, '')
-            .replace(/on\w+\s*=/gi, 'data-blocked-event=')
+            .replace(/\bon[a-z]+\s*=/gi, 'data-blocked-event=')
             .replace(/javascript:/gi, 'blocked:');
     }
 

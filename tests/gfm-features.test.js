@@ -150,3 +150,34 @@ test('GitHub README Parity - Aligned containers, badges in links, and table colu
     assert.match(tableHtml, /<th align="right"[^>]*>Status<\/th>/);
     assert.match(tableHtml, /<td align="right"[^>]*>Passed<\/td>/);
 });
+
+test('GitHub Profile README Parity - HTML comments stripped, entities preserved, and centered paragraphs intact', () => {
+    const parser = new Parser();
+
+    // 1. HTML comments outside code blocks must NOT leak as text
+    const commentMd = '<!-- Header Banner: Waving Gradient -->\n# Welcome\n<!-- Dynamic Typing SVG -->\nHello world';
+    const commentHtml = parser.parse(commentMd);
+    assert.doesNotMatch(commentHtml, /&lt;!--/);
+    assert.doesNotMatch(commentHtml, /Header Banner/);
+    assert.doesNotMatch(commentHtml, /Dynamic Typing SVG/);
+    assert.match(commentHtml, /<h1[^>]*>.*?Welcome<\/h1>/);
+
+    // 2. HTML comments inside code blocks MUST be preserved as code
+    const codeWithCommentMd = '```html\n<!-- comment in code -->\n```';
+    const codeWithCommentHtml = parser.parse(codeWithCommentMd);
+    assert.match(codeWithCommentHtml, /&lt;!-- comment in code --&gt;/);
+
+    // 3. Numeric & named HTML entities preserved without double-escaping
+    const entityMd = '<p align="center">\n  <a href="https://example.com"><img width="34px" src="icon.png"/></a>\n  &#8287;&#8287;&#8287;\n  <a href="https://youtube.com"><img width="34px" src="yt.png"/></a>\n</p>';
+    const entityHtml = parser.parse(entityMd);
+    assert.doesNotMatch(entityHtml, /&amp;#8287;/);
+    assert.match(entityHtml, /&#8287;&#8287;&#8287;/);
+    assert.match(entityHtml, /<p align="center">/);
+    assert.doesNotMatch(entityHtml, /<p align="center">\s*<p/);
+
+    // 4. Standalone self-closing <br/> tags preserved without escaping
+    const brMd = '<div align="center">\n\n<br/>\n\n**Oathan Rex**\n\n</div>';
+    const brHtml = parser.parse(brMd);
+    assert.doesNotMatch(brHtml, /&lt;br/);
+    assert.match(brHtml, /<br\s*\/?>/);
+});

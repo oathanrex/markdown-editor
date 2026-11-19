@@ -321,16 +321,20 @@
 /* Images */
 .markdown-body img {
     max-width: 100%;
-    height: auto;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
+    box-sizing: content-box;
+    vertical-align: middle;
 }
 
-/* Badges & inline icon images (GitHub-style: no shadows, inline display) */
+/* Badges, stats cards, and inline icons (GitHub parity: crisp, flat, inline display) */
 .markdown-body a img,
 .markdown-body img[src*="shields.io"],
 .markdown-body img[src*="badge"],
-.markdown-body img[src*=".svg"] {
+.markdown-body img[src*=".svg"],
+.markdown-body img[src*="github-readme"],
+.markdown-body img[src*="streak-stats"],
+.markdown-body img[src*="komarev.com"],
+.markdown-body img[src*="capsule-render"],
+.markdown-body [align="center"] img {
     box-shadow: none;
     border-radius: 0;
     vertical-align: middle;
@@ -338,7 +342,7 @@
     margin: 2px 2px;
 }
 
-/* Aligned container & header support (e.g. <div align="center">) */
+/* Aligned container & header support (e.g. <div align="center">, <p align="center">) */
 .markdown-body [align="center"],
 .markdown-body div[align="center"],
 .markdown-body p[align="center"],
@@ -363,7 +367,10 @@
     text-align: left;
 }
 
-.markdown-body [align="center"] > * {
+.markdown-body [align="center"] > table,
+.markdown-body [align="center"] > .table-wrapper,
+.markdown-body [align="center"] > pre,
+.markdown-body [align="center"] > blockquote {
     margin-left: auto;
     margin-right: auto;
 }
